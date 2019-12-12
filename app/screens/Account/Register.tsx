@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Image, Text } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scrollview";
+import RegisterForm from "../../components/Account/RegisterForm";
 
 export default function Register() {
     return (
@@ -11,7 +12,7 @@ export default function Register() {
                 resizeMode="contain"
             />
             <View style={styles.form}>
-                <Text>Form register...</Text>
+                <RegisterForm />
             </View>
         </KeyboardAwareScrollView>
     );
