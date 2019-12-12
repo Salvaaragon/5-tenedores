@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from "react-navigation-tabs";
 import RestaurantsScreenStacks from "./RestaurantsStacks";
 import TopListsScreenStacks from "./TopListsStacks";
 import SearchScreenStacks from "./SearchStacks";
-import MyAccountScreenStacks from "./MyAccountStacks";
+import MyAccountScreenStacks from "./AccountStacks";
 
 const NavigationStacks = createBottomTabNavigator(
     {
@@ -68,7 +68,7 @@ const NavigationStacks = createBottomTabNavigator(
         }
     },
     {
-        initialRouteName: "Restaurants",
+        initialRouteName: "MyAccount",
         order: ["Restaurants", "TopLists", "Search", "MyAccount"],
         tabBarOptions: {
             inactiveTintColor: "#646464",
