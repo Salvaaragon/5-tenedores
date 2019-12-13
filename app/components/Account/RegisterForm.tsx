@@ -1,8 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
 
 export default function RegisterForm() {
+    const [hidePassword, setHidePassword] = useState(true);
+    const [hideRepeatPassword, setHideRepeatPassword] = useState(true);
+
     const register = () => {
         console.log("User registered");
     };
@@ -23,27 +26,35 @@ export default function RegisterForm() {
             />
             <Input
                 placeholder="Password"
-                secureTextEntry={true}
+                secureTextEntry={hidePassword}
                 containerStyle={styles.input}
                 onChange={() => console.log("Password changed")}
                 rightIcon={
                     <Icon
                         type="material-community"
-                        name="eye-outline"
+                        name={hidePassword ? "eye-outline" : "eye-off-outline"}
                         iconStyle={styles.icon}
+                        onPress={() => setHidePassword(!hidePassword)}
                     />
                 }
             />
             <Input
                 placeholder="Repeat password"
-                secureTextEntry={true}
+                secureTextEntry={hideRepeatPassword}
                 containerStyle={styles.input}
                 onChange={() => console.log("Repeat password changed")}
                 rightIcon={
                     <Icon
                         type="material-community"
-                        name="eye-outline"
+                        name={
+                            hideRepeatPassword
+                                ? "eye-outline"
+                                : "eye-off-outline"
+                        }
                         iconStyle={styles.icon}
+                        onPress={() =>
+                            setHideRepeatPassword(!hideRepeatPassword)
+                        }
                     />
                 }
             />
