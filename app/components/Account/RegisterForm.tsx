@@ -5,9 +5,15 @@ import { Input, Icon, Button } from "react-native-elements";
 export default function RegisterForm() {
     const [hidePassword, setHidePassword] = useState(true);
     const [hideRepeatPassword, setHideRepeatPassword] = useState(true);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [repeatPassword, setRepeatPassword] = useState("");
 
     const register = () => {
         console.log("User registered");
+        console.log("Email: " + email);
+        console.log("Password: " + password);
+        console.log("Repeat password: " + repeatPassword);
     };
 
     return (
@@ -15,7 +21,7 @@ export default function RegisterForm() {
             <Input
                 placeholder="Email"
                 containerStyle={styles.input}
-                onChange={() => console.log("Email changed")}
+                onChange={e => setEmail(e.nativeEvent.text)}
                 rightIcon={
                     <Icon
                         type="material-community"
@@ -28,7 +34,7 @@ export default function RegisterForm() {
                 placeholder="Password"
                 secureTextEntry={hidePassword}
                 containerStyle={styles.input}
-                onChange={() => console.log("Password changed")}
+                onChange={e => setPassword(e.nativeEvent.text)}
                 rightIcon={
                     <Icon
                         type="material-community"
@@ -42,7 +48,7 @@ export default function RegisterForm() {
                 placeholder="Repeat password"
                 secureTextEntry={hideRepeatPassword}
                 containerStyle={styles.input}
-                onChange={() => console.log("Repeat password changed")}
+                onChange={e => setRepeatPassword(e.nativeEvent.text)}
                 rightIcon={
                     <Icon
                         type="material-community"
