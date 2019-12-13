@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Input, Icon, Button } from "react-native-elements";
+import { Button, Icon, Input } from "react-native-elements";
+import { validateEmail } from "../../utils/Validation";
+import * as firebase from "firebase";
 
 export default function RegisterForm() {
     const [hidePassword, setHidePassword] = useState(true);
@@ -9,11 +11,30 @@ export default function RegisterForm() {
     const [password, setPassword] = useState("");
     const [repeatPassword, setRepeatPassword] = useState("");
 
-    const register = () => {
-        console.log("User registered");
-        console.log("Email: " + email);
-        console.log("Password: " + password);
-        console.log("Repeat password: " + repeatPassword);
+    const register = async () => {
+        if (!email || !password || !repeatPassword) {
+            console.log("All fields are required");
+        } else {
+            if (!validateEmail(email)) {
+                console.log("Wrong email");
+            } else {
+                if (password !== repeatPassword) {
+                    console.log("Passwords are different");
+                } else {
+                    await firebase
+                        .auth()
+                        .createUserWithEmailAndPassword(email, password)
+                        .then(() => {
+                            console.log("User created correctly");
+                        })
+                        .catch(() => {
+                            console.log(
+                                "Error creating user account. Try again later"
+                            );
+                        });
+                }
+            }
+        }
     };
 
     return (
