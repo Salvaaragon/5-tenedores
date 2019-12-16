@@ -5,6 +5,8 @@ import Login from "../../screens/Account/Login";
 
 export default function LoginForm() {
     const [hidePassword, setHidePassword] = useState(true);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
 
     const login = () => {
         console.log("Logged user");
@@ -15,7 +17,7 @@ export default function LoginForm() {
             <Input
                 placeholder="Email"
                 containerStyle={styles.input}
-                onChange={() => console.log("Email updated")}
+                onChange={e => setEmail(e.nativeEvent.text)}
                 rightIcon={
                     <Icon
                         type="material-community"
@@ -27,7 +29,7 @@ export default function LoginForm() {
             <Input
                 placeholder="Password"
                 containerStyle={styles.input}
-                onChange={() => console.log("Password updated")}
+                onChange={e => setPassword(e.nativeEvent.text)}
                 secureTextEntry={hidePassword}
                 rightIcon={
                     <Icon
