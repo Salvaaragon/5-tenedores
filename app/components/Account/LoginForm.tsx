@@ -2,14 +2,28 @@ import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
 import Login from "../../screens/Account/Login";
+import { validateEmail } from "../../utils/Validation";
+import Loading from "../Loading";
 
-export default function LoginForm() {
+export default function LoginForm(props) {
+    const { toastRef } = props;
     const [hidePassword, setHidePassword] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [isVisibleLoading, setIsVisibleLoading] = useState(true);
 
     const login = () => {
-        console.log("Logged user");
+        setIsVisibleLoading(true);
+        if (!email || !password) {
+            toastRef.current.show("All fields are required");
+        } else {
+            if (!validateEmail(email)) {
+                toastRef.current.show("Wrong email");
+            } else {
+                console.log("Correct login");
+            }
+        }
+        setIsVisibleLoading(false);
     };
 
     return (
@@ -46,6 +60,7 @@ export default function LoginForm() {
                 buttonStyle={styles.btn}
                 onPress={login}
             />
+            <Loading isVisible={isVisibleLoading} text="Login user..." />
         </View>
     );
 }
