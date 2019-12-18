@@ -1,26 +1,36 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Input, Icon, Button } from "react-native-elements";
-import Login from "../../screens/Account/Login";
+import { withNavigation } from "react-navigation";
 import { validateEmail } from "../../utils/Validation";
 import Loading from "../Loading";
+import * as firebase from "firebase";
+import Login from "../../screens/Account/Login";
 
-export default function LoginForm(props) {
-    const { toastRef } = props;
+function LoginForm(props) {
+    const { toastRef, navigation } = props;
     const [hidePassword, setHidePassword] = useState(true);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [isVisibleLoading, setIsVisibleLoading] = useState(true);
+    const [isVisibleLoading, setIsVisibleLoading] = useState(false);
 
-    const login = () => {
-        setIsVisibleLoading(true);
+    const login = async () => {
+        setIsVisibleLoading(false);
         if (!email || !password) {
             toastRef.current.show("All fields are required");
         } else {
             if (!validateEmail(email)) {
                 toastRef.current.show("Wrong email");
             } else {
-                console.log("Correct login");
+                await firebase
+                    .auth()
+                    .signInWithEmailAndPassword(email, password)
+                    .then(() => {
+                        navigation.navigate("MyAccount");
+                    })
+                    .catch(() => {
+                        toastRef.current.show("Wrong email or password");
+                    });
             }
         }
         setIsVisibleLoading(false);
@@ -64,6 +74,8 @@ export default function LoginForm(props) {
         </View>
     );
 }
+
+export default withNavigation(LoginForm);
 
 const styles = StyleSheet.create({
     container: {
