@@ -3,6 +3,7 @@ import { StyleSheet, View, ScrollView, Text, Image } from "react-native";
 import { Divider } from "react-native-elements";
 import LoginForm from "../../components/Account/LoginForm";
 import Toast from "react-native-easy-toast";
+import LoginFacebook from "../../components/Account/LoginFacebook";
 
 export default function Login(props) {
     const { navigation } = props;
@@ -21,7 +22,7 @@ export default function Login(props) {
             </View>
             <Divider style={styles.divider} />
             <View style={styles.container}>
-                <Text>LoginFacebook</Text>
+                <LoginFacebook />
             </View>
             <Toast ref={toastRef} position="center" opacity={0.5} />
         </ScrollView>
@@ -47,7 +48,7 @@ function CreateAccount(props) {
 const styles = StyleSheet.create({
     logo: {
         width: "100%",
-        height: 250,
+        height: 180,
         marginTop: 20
     },
     container: {
@@ -65,6 +66,9 @@ const styles = StyleSheet.create({
     },
     divider: {
         backgroundColor: "#00a680",
-        margin: 40
+        marginTop: 20,
+        marginRight: 40,
+        marginBottom: 20,
+        marginLeft: 40
     }
 });
