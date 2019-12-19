@@ -7,7 +7,11 @@ import * as ImagePicker from "expo-image-picker";
 
 export default function InfoUser(props) {
     const {
-        userInfo: { uid, displayName, email, photoURL }
+        userInfo: { uid, displayName, email, photoURL },
+        setReloadData,
+        toastRef,
+        setIsLoading,
+        setTextLoading
     } = props;
 
     const changeAvatar = async () => {
@@ -18,7 +22,7 @@ export default function InfoUser(props) {
             resultPermission.permissions.cameraRoll.status;
 
         if (resultPermissionCamera == "denied") {
-            console.log("Is required to accept gallery permissions");
+            toastRef.current.show("Is required to accept gallery permissions");
         } else {
             const result = await ImagePicker.launchImageLibraryAsync({
                 allowsEditing: true,
@@ -26,10 +30,11 @@ export default function InfoUser(props) {
             });
 
             if (result.cancelled) {
-                console.log("You have closed image gallery");
+                toastRef.current.show(
+                    "You have closed image gallery without select an image"
+                );
             } else {
                 uploadImage(result.uri, uid).then(() => {
-                    console.log("Image uploaded correctly");
                     updatePhotoUrl(uid);
                 });
             }
@@ -37,6 +42,8 @@ export default function InfoUser(props) {
     };
 
     const uploadImage = async (uri, imageName) => {
+        setTextLoading("Updating avatar");
+        setIsLoading(true);
         const response = await fetch(uri);
         const blob = await response.blob();
 
@@ -58,9 +65,11 @@ export default function InfoUser(props) {
                     photoURL: result
                 };
                 await firebase.auth().currentUser.updateProfile(update);
+                setReloadData(true);
+                setIsLoading(false);
             })
             .catch(() => {
-                console.log("Error getting avatar from server");
+                toastRef.current.show("Error getting avatar from server");
             });
     };
 
