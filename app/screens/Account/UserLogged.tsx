@@ -30,7 +30,11 @@ export default function UserLogged() {
                 setIsLoading={setIsLoading}
                 setTextLoading={setTextLoading}
             />
-            <AccountOptions />
+            <AccountOptions
+                userInfo={userInfo}
+                setReloadData={setReloadData}
+                toastRef={toasRef}
+            />
             <Button
                 title="Logout"
                 buttonStyle={styles.btnLogout}
