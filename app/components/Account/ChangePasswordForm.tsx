@@ -16,7 +16,51 @@ export default function ChangePasswordForm(props) {
     const [hideNewPasswordRepeat, setHideNewPasswordRepeat] = useState(true);
 
     const updatePassword = () => {
-        console.log("Password changed");
+        setError({});
+
+        if (!password || !newPassword || !newPasswordRepeat) {
+            let objError = {};
+
+            !password && (objError.password = "Password field is required");
+            !newPassword &&
+                (objError.newPassword = "New password field is required");
+            !newPasswordRepeat &&
+                (objError.newPasswordRepeat =
+                    "New password repeat field is required");
+            setError(objError);
+        } else {
+            if (newPassword != newPasswordRepeat) {
+                setError({
+                    newPassword: "New password must be equal",
+                    newPasswordRepeat: "New password must be equal"
+                });
+            } else {
+                setIsLoading(true);
+                reauthenticate(password)
+                    .then(() => {
+                        firebase
+                            .auth()
+                            .currentUser.updatePassword(newPassword)
+                            .then(() => {
+                                setIsLoading(false);
+                                toastRef.current.show(
+                                    "Password updated correctly"
+                                );
+                                setIsVisibleModal(false);
+                            })
+                            .catch(() => {
+                                setError({
+                                    general: "Error updating password"
+                                });
+                                setIsLoading(false);
+                            });
+                    })
+                    .catch(() => {
+                        setError({ password: "Wrong password" });
+                        setIsLoading(false);
+                    });
+            }
+        }
     };
 
     return (
