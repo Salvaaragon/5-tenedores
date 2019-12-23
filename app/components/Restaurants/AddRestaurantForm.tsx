@@ -13,6 +13,7 @@ export default function AddRestaurantForm(props) {
     return (
         <ScrollView>
             <ImageRestaurant imageRestaurant={imagesSelected[0]} />
+            <FormAdd />
             <UploadImage
                 imagesSelected={imagesSelected}
                 setImagesSelected={setImagesSelected}
@@ -120,6 +121,35 @@ function UploadImage(props) {
     );
 }
 
+function FormAdd(props) {
+    return (
+        <View style={styles.viewForm}>
+            <Input
+                placeholder="Restaurant name"
+                containerStyle={styles.input}
+                onChange={() => {}}
+            />
+            <Input
+                placeholder="Address"
+                containerStyle={styles.input}
+                rightIcon={{
+                    type: "material-community",
+                    name: "google-maps",
+                    color: "#C2C2C2",
+                    onPress: () => {}
+                }}
+                onChange={() => {}}
+            />
+            <Input
+                placeholder="Restaurant description"
+                multiline={true}
+                containerStyle={styles.textArea}
+                onChange={() => {}}
+            />
+        </View>
+    );
+}
+
 const styles = StyleSheet.create({
     viewPhoto: {
         alignItems: "center",
@@ -144,5 +174,18 @@ const styles = StyleSheet.create({
         width: 70,
         height: 70,
         marginRight: 10
+    },
+    viewForm: {
+        marginLeft: 10,
+        marginRight: 10
+    },
+    input: {
+        marginBottom: 10
+    },
+    textArea: {
+        height: 100,
+        width: "100%",
+        padding: 0,
+        margin: 0
     }
 });
