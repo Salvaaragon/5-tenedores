@@ -51,6 +51,29 @@ function UploadImage(props) {
         }
     };
 
+    const imageRemove = image => {
+        const arrayImages = imagesSelected;
+
+        Alert.alert(
+            "Delete image",
+            "Are you sure you want to delete this image?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Delete",
+                    onPress: () =>
+                        setImagesSelected(
+                            arrayImages.filter(imageUrl => imageUrl !== image)
+                        )
+                }
+            ],
+            { cancelable: false }
+        );
+    };
+
     return (
         <View style={styles.viewImages}>
             {imagesSelected.length < 5 && (
@@ -65,7 +88,7 @@ function UploadImage(props) {
             {imagesSelected.map((imageRestaurant, idx) => (
                 <Avatar
                     key={idx}
-                    onPress={() => console.log("Deleting image")}
+                    onPress={() => imageRemove(imageRestaurant)}
                     style={styles.miniatureStyle}
                     source={{ uri: imageRestaurant }}
                 />
