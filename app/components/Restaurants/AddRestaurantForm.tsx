@@ -9,11 +9,18 @@ const WidthScreen = Dimensions.get("window").width;
 export default function AddRestaurantForm(props) {
     const { toastRef, setIsLoading, navigation } = props;
     const [imagesSelected, setImagesSelected] = useState([]);
+    const [restaurantName, setRestaurantName] = useState("");
+    const [restaurantAddress, setRestaurantAddress] = useState("");
+    const [restaurantDescription, setRestaurantDescription] = useState("");
 
     return (
         <ScrollView>
             <ImageRestaurant imageRestaurant={imagesSelected[0]} />
-            <FormAdd />
+            <FormAdd
+                setRestaurantName={setRestaurantName}
+                setRestaurantAddress={setRestaurantAddress}
+                setRestaurantDescription={setRestaurantDescription}
+            />
             <UploadImage
                 imagesSelected={imagesSelected}
                 setImagesSelected={setImagesSelected}
@@ -122,12 +129,17 @@ function UploadImage(props) {
 }
 
 function FormAdd(props) {
+    const {
+        setRestaurantName,
+        setRestaurantAddress,
+        setRestaurantDescription
+    } = props;
     return (
         <View style={styles.viewForm}>
             <Input
                 placeholder="Restaurant name"
                 containerStyle={styles.input}
-                onChange={() => {}}
+                onChange={e => setRestaurantName(e.nativeEvent.text)}
             />
             <Input
                 placeholder="Address"
@@ -138,13 +150,13 @@ function FormAdd(props) {
                     color: "#C2C2C2",
                     onPress: () => {}
                 }}
-                onChange={() => {}}
+                onChange={e => setRestaurantAddress(e.nativeEvent.text)}
             />
             <Input
                 placeholder="Restaurant description"
                 multiline={true}
                 containerStyle={styles.textArea}
-                onChange={() => {}}
+                onChange={e => setRestaurantDescription(e.nativeEvent.text)}
             />
         </View>
     );
