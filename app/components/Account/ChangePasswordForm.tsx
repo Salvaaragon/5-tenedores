@@ -1,10 +1,94 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useState } from "react";
+import { View, StyleSheet, Text } from "react-native";
+import { Input, Button } from "react-native-elements";
+import * as firebase from "firebase";
+import { reauthenticate } from "../../utils/Api";
 
-export default function ChangePasswordForm() {
+export default function ChangePasswordForm(props) {
+    const { setIsVisibleModal, toastRef } = props;
+    const [password, setPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+    const [newPasswordRepeat, setNewPasswordRepeat] = useState("");
+    const [error, setError] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [hidePassword, setHidePassword] = useState(true);
+    const [hideNewPassword, setHideNewPassword] = useState(true);
+    const [hideNewPasswordRepeat, setHideNewPasswordRepeat] = useState(true);
+
+    const updatePassword = () => {
+        console.log("Password changed");
+    };
+
     return (
-        <View>
-            <Text>ChangePasswordForm</Text>
+        <View style={styles.view}>
+            <Input
+                placeholder="Current password"
+                containerStyle={styles.input}
+                secureTextEntry={hidePassword}
+                onChange={e => setPassword(e.nativeEvent.text)}
+                rightIcon={{
+                    type: "material-community",
+                    name: hidePassword ? "eye-outline" : "eye-off-outline",
+                    color: "#C2C2C2",
+                    onPress: () => setHidePassword(!hidePassword)
+                }}
+                errorMessage={error.password}
+            />
+            <Input
+                placeholder="New password"
+                containerStyle={styles.input}
+                secureTextEntry={hideNewPassword}
+                onChange={e => setNewPassword(e.nativeEvent.text)}
+                rightIcon={{
+                    type: "material-community",
+                    name: hideNewPassword ? "eye-outline" : "eye-off-outline",
+                    color: "#C2C2C2",
+                    onPress: () => setHideNewPassword(!hideNewPassword)
+                }}
+                errorMessage={error.newPassword}
+            />
+            <Input
+                placeholder="Repeat new password"
+                containerStyle={styles.input}
+                secureTextEntry={hideNewPasswordRepeat}
+                onChange={e => setNewPasswordRepeat(e.nativeEvent.text)}
+                rightIcon={{
+                    type: "material-community",
+                    name: hideNewPasswordRepeat
+                        ? "eye-outline"
+                        : "eye-off-outline",
+                    color: "#C2C2C2",
+                    onPress: () =>
+                        setHideNewPasswordRepeat(!hideNewPasswordRepeat)
+                }}
+                errorMessage={error.newPasswordRepeat}
+            />
+            <Button
+                title="Change password"
+                containerStyle={styles.btnContainer}
+                buttonStyle={styles.btn}
+                onPress={updatePassword}
+                loading={isLoading}
+            />
+            <Text>{error.general}</Text>
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    view: {
+        alignItems: "center",
+        paddingTop: 10,
+        paddingBottom: 10
+    },
+    input: {
+        marginBottom: 10
+    },
+    btnContainer: {
+        marginTop: 20,
+        width: "95%"
+    },
+    btn: {
+        backgroundColor: "#00A680"
+    }
+});
