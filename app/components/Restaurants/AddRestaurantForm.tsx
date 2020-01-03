@@ -3,6 +3,7 @@ import { StyleSheet, View, ScrollView, Alert, Dimensions } from "react-native";
 import { Icon, Avatar, Image, Input, Button } from "react-native-elements";
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from "expo-image-picker";
+import * as Location from "expo-location";
 import MapView from "react-native-maps";
 import Modal from "../Modal";
 
@@ -186,6 +187,31 @@ function Map(props) {
 
     const [location, setLocation] = useState(null);
 
+    useEffect(() => {
+        (async () => {
+            const resultPermissions = await Permissions.askAsync(
+                Permissions.LOCATION
+            );
+            const statusPermissions =
+                resultPermissions.permissions.location.status;
+
+            if (statusPermissions !== "granted") {
+                toastRef.current.show(
+                    "Is required to accept location permissions to create new restaurants",
+                    3000
+                );
+            } else {
+                const loc = await Location.getCurrentPositionAsync({});
+                setLocation({
+                    latitude: loc.coords.latitude,
+                    longitude: loc.coords.longitude,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001
+                });
+            }
+        })();
+    }, []);
+
     return (
         <Modal isVisible={isVisibleMap} setIsVisible={setIsVisibleMap}>
             <View>
@@ -197,7 +223,7 @@ function Map(props) {
                         onRegionChange={region => setLocation(region)}
                     >
                         <MapView.Marker
-                            coorditane={{
+                            coordinate={{
                                 latitude: location.latitude,
                                 longitude: location.longitude
                             }}
@@ -264,7 +290,7 @@ const styles = StyleSheet.create({
     },
     mapStyle: {
         width: "100%",
-        height: 150
+        height: 550
     },
     viewMapBtn: {
         flexDirection: "row",
