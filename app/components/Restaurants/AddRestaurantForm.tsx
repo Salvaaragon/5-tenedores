@@ -18,6 +18,18 @@ export default function AddRestaurantForm(props) {
     const [isVisibleMap, setIsVisibleMap] = useState(false);
     const [locationRestaurant, setLocationRestaurant] = useState(null);
 
+    const addRestaurant = () => {
+        if (!restaurantName || !restaurantAddress || !restaurantDescription) {
+            toastRef.current.show("All fields are required");
+        } else if (imagesSelected.length === 0) {
+            toastRef.current.show("Restaurant need at least one picture");
+        } else if (!locationRestaurant) {
+            toastRef.current.show("You need to locate restaurant on the map");
+        } else {
+            setIsLoading(true);
+        }
+    };
+
     return (
         <ScrollView>
             <ImageRestaurant imageRestaurant={imagesSelected[0]} />
@@ -33,6 +45,12 @@ export default function AddRestaurantForm(props) {
                 setImagesSelected={setImagesSelected}
                 toastRef={toastRef}
             />
+            <Button
+                title="Create restaurant"
+                onPress={addRestaurant}
+                buttonStyle={styles.btnAddRestaurant}
+            />
+
             <Map
                 isVisibleMap={isVisibleMap}
                 setIsVisibleMap={setIsVisibleMap}
@@ -316,5 +334,9 @@ const styles = StyleSheet.create({
     },
     viewMapBtnCancel: {
         backgroundColor: "#A60D0D"
+    },
+    btnAddRestaurant: {
+        backgroundColor: "#00A680",
+        margin: 20
     }
 });
