@@ -37,7 +37,7 @@ export default function AddRestaurantForm(props) {
                 db.collection("restaurants")
                     .add({
                         name: restaurantName,
-                        addres: restaurantAddress,
+                        address: restaurantAddress,
                         description: restaurantDescription,
                         location: locationRestaurant,
                         images: arrayImages,
