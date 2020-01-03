@@ -15,6 +15,7 @@ export default function Restaurants(props) {
     const [startRestaurant, setStartRestaurant] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
     const [totalRestaurants, setTotalRestaurants] = useState(0);
+    const [isReloadRestaurants, setIsReloadRestaurants] = useState(false);
     const limitRestaurants = 8;
 
     useEffect(() => {
@@ -50,7 +51,8 @@ export default function Restaurants(props) {
                 setRestaurants(resultRestaurants);
             });
         })();
-    }, []);
+        setIsReloadRestaurants(false);
+    }, [isReloadRestaurants]);
 
     const handleLoadMore = async () => {
         const resultRestaurants = [];
@@ -86,17 +88,24 @@ export default function Restaurants(props) {
                 isLoading={isLoading}
                 handleLoadMore={handleLoadMore}
             />
-            {user && <AddRestaurantButton navigation={navigation} />}
+            {user && (
+                <AddRestaurantButton
+                    navigation={navigation}
+                    setIsReloadRestaurants={setIsReloadRestaurants}
+                />
+            )}
         </View>
     );
 }
 
 function AddRestaurantButton(props) {
-    const { navigation } = props;
+    const { navigation, setIsReloadRestaurants } = props;
     return (
         <ActionButton
             buttonColor="#00A680"
-            onPress={() => navigation.navigate("AddRestaurant")}
+            onPress={() =>
+                navigation.navigate("AddRestaurant", { setIsReloadRestaurants })
+            }
         />
     );
 }
