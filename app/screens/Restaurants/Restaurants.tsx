@@ -35,11 +35,11 @@ export default function Restaurants(props) {
 
             const restaurants = db
                 .collection("restaurants")
-                .orderBy("createdAt", "desc")
+                .orderBy("createAt", "desc")
                 .limit(limitRestaurants);
 
             await restaurants.get().then(response => {
-                setStartRestaurants(response.docs[Response.docs.length - 1]);
+                setStartRestaurants(response.docs[response.docs.length - 1]);
 
                 response.forEach(doc => {
                     let restaurant = doc.data();
@@ -54,7 +54,7 @@ export default function Restaurants(props) {
 
     return (
         <View style={styles.viewBody}>
-            <ListRestaurants restaurants={restaurants} />
+            <ListRestaurants restaurants={restaurants} isLoading={isLoading} />
             {user && <AddRestaurantButton navigation={navigation} />}
         </View>
     );
