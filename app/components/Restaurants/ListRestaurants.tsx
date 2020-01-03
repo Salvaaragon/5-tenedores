@@ -11,7 +11,7 @@ import { Image } from "react-native-elements";
 import * as firebase from "firebase";
 
 export default function ListRestaurants(props) {
-    const { restaurants, isLoading } = props;
+    const { restaurants, isLoading, handleLoadMore } = props;
     return (
         <View>
             {restaurants ? (
@@ -21,7 +21,7 @@ export default function ListRestaurants(props) {
                         <Restaurant restaurant={restaurant} />
                     )}
                     keyExtractor={(item, idx) => idx.toString()}
-                    // onEndReached={}
+                    onEndReached={handleLoadMore}
                     onEndReachedThreshold={0}
                     ListFooterComponent={<FooterList isLoading={isLoading} />}
                 />
