@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Dimensions } from "react-native";
+import CustomCarousel from "../../components/CustomCarousel";
 import * as firebase from "firebase";
+
+const screenWidth = Dimensions.get("window").width;
 
 export default function Restaurant(props) {
     const { navigation } = props;
@@ -28,7 +31,11 @@ export default function Restaurant(props) {
 
     return (
         <View>
-            <Text>Restaurant page</Text>
+            <CustomCarousel
+                arrayImages={imagesRestaurant}
+                width={screenWidth}
+                height={200}
+            />
         </View>
     );
 }
