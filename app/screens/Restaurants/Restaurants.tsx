@@ -87,6 +87,7 @@ export default function Restaurants(props) {
                 restaurants={restaurants}
                 isLoading={isLoading}
                 handleLoadMore={handleLoadMore}
+                navigation={navigation}
             />
             {user && (
                 <AddRestaurantButton
