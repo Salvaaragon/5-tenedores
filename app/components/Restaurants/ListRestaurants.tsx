@@ -22,7 +22,7 @@ export default function ListRestaurants(props) {
                     )}
                     keyExtractor={(item, idx) => idx.toString()}
                     onEndReached={handleLoadMore}
-                    onEndReachedThreshold={0}
+                    onEndReachedThreshold={0.5}
                     ListFooterComponent={<FooterList isLoading={isLoading} />}
                 />
             ) : (
