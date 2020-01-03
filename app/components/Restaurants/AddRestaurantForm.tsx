@@ -33,7 +33,32 @@ export default function AddRestaurantForm(props) {
             toastRef.current.show("You need to locate restaurant on the map");
         } else {
             setIsLoading(true);
-            uploadImagesStorage(imagesSelected).then(arrayImages => {});
+            uploadImagesStorage(imagesSelected).then(arrayImages => {
+                db.collection("restaurants")
+                    .add({
+                        name: restaurantName,
+                        addres: restaurantAddress,
+                        description: restaurantDescription,
+                        location: locationRestaurant,
+                        images: arrayImages,
+                        rating: 0,
+                        ratingTotal: 0,
+                        quantityVoting: 0,
+                        createAt: new Date(),
+                        createBy: firebaseApp.auth().currentUser.uid
+                    })
+                    .then(() => {
+                        setIsLoading(false);
+                        navigation.navigate("Restaurants");
+                    })
+                    .catch(() => {
+                        setIsLoading(false);
+                        toastRef.current.show(
+                            "Error uploading restaurant. Try again later",
+                            2000
+                        );
+                    });
+            });
         }
     };
 
