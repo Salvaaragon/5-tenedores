@@ -8,7 +8,7 @@ import "firebase/firestore";
 const db = firebase.firestore(firebaseApp);
 
 export default function ListReviews(props) {
-    const { navigation, idRestaurant } = props;
+    const { navigation, idRestaurant, setRating } = props;
     const [reviews, setReviews] = useState([]);
     const [reviewsReload, setReviewsReload] = useState(false);
 
@@ -36,6 +36,7 @@ export default function ListReviews(props) {
                     const resultRatingFinish = resultRating ? resultRating : 0;
 
                     setReviews(resultReviews);
+                    setRating(resultRatingFinish);
                 });
 
             setReviewsReload(false);
@@ -55,7 +56,8 @@ export default function ListReviews(props) {
                 }}
                 onPress={() =>
                     navigation.navigate("AddReviewRestaurant", {
-                        idRestaurant: idRestaurant
+                        idRestaurant: idRestaurant,
+                        setReviewsReload: setReviewsReload
                     })
                 }
             />
