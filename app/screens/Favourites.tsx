@@ -11,6 +11,7 @@ import {
 import { Image, Icon } from "react-native-elements";
 import Loading from "../components/Loading";
 import Toast from "react-native-easy-toast";
+import { NavigationEvents } from "react-navigation";
 
 import { firebaseApp } from "../utils/FireBase";
 import firebase from "firebase/app";
@@ -62,6 +63,7 @@ export default function Favourites(props) {
 
     return (
         <View style={styles.viewBody}>
+            <NavigationEvents onWillFocus={() => setReloadRestaurants(true)} />
             {restaurants ? (
                 <FlatList
                     data={restaurants}
