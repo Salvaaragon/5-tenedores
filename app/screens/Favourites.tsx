@@ -7,7 +7,7 @@ import {
     ActivityIndicator,
     TouchableOpacity
 } from "react-native";
-import { Image } from "react-native-elements";
+import { Image, Icon } from "react-native-elements";
 
 import { firebaseApp } from "../utils/FireBase";
 import firebase from "firebase/app";
@@ -54,8 +54,108 @@ export default function Favourites(props) {
     };
 
     return (
-        <View>
-            <Text>Favourites...</Text>
+        <View style={styles.viewBody}>
+            {restaurants ? (
+                <FlatList
+                    data={restaurants}
+                    renderItem={restaurant => (
+                        <Restaurant
+                            restaurant={restaurant}
+                            navigation={navigation}
+                        />
+                    )}
+                    keyExtractor={(item, idx) => idx.toString()}
+                />
+            ) : (
+                <View style={styles.loaderRestaurants}>
+                    <ActivityIndicator size="large" />
+                    <Text>Loading restaurants</Text>
+                </View>
+            )}
         </View>
     );
 }
+
+function Restaurant(props) {
+    const { restaurant, navigation } = props;
+    const { name, images } = restaurant.item;
+    const [imageRestaurant, setImageRestaurant] = useState(null);
+
+    useEffect(() => {
+        const image = images[0];
+        firebase
+            .storage()
+            .ref(`restaurant-images/${image}`)
+            .getDownloadURL()
+            .then(response => {
+                setImageRestaurant(response);
+            });
+    }, []);
+
+    return (
+        <View style={styles.restaurant}>
+            <TouchableOpacity onPress={() => console.log("Go to restaurant")}>
+                <Image
+                    resizeMode="cover"
+                    source={{
+                        uri: imageRestaurant
+                    }}
+                    style={styles.image}
+                    PlaceholderContent={<ActivityIndicator color={"FFF"} />}
+                />
+            </TouchableOpacity>
+            <View style={styles.info}>
+                <Text style={styles.name}>{name}</Text>
+                <Icon
+                    type="material-community"
+                    name="heart"
+                    color="#00A680"
+                    containerStyle={styles.favourite}
+                    onPress={() => console.log("Delete from favourites")}
+                    size={40}
+                    underlayColor="transparent"
+                />
+            </View>
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    viewBody: {
+        flex: 1,
+        backgroundColor: "#F2F2F2"
+    },
+    loaderRestaurants: {
+        marginTop: 10,
+        marginBottom: 10
+    },
+    restaurant: {
+        margin: 10
+    },
+    image: {
+        width: "100%",
+        height: 180
+    },
+    info: {
+        flex: 1,
+        alignItems: "center",
+        justifyContent: "space-between",
+        flexDirection: "row",
+        paddingLeft: 20,
+        paddingRight: 20,
+        paddingTop: 10,
+        paddingBottom: 10,
+        marginTop: -30,
+        backgroundColor: "#FFF"
+    },
+    name: {
+        fontWeight: "bold",
+        fontSize: 25
+    },
+    favourite: {
+        marginTop: -35,
+        backgroundColor: "#FFF",
+        padding: 15,
+        borderRadius: 100
+    }
+});
