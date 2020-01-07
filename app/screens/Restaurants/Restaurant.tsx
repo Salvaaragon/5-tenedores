@@ -40,6 +40,18 @@ export default function Restaurant(props) {
         })();
     }, []);
 
+    useEffect(() => {
+        db.collection("favourites")
+            .where("idRestaurant", "==", restaurant.id)
+            .where("idUser", "==", firebase.auth().currentUser.uid)
+            .get()
+            .then(response => {
+                if (response.docs.length === 1) {
+                    setIsFavourite(true);
+                }
+            });
+    }, []);
+
     const addFavourite = () => {
         const payload = {
             idUser: firebase.auth().currentUser.uid,
