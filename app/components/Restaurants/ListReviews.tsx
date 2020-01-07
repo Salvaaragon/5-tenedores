@@ -10,7 +10,7 @@ export default function ListReviews(props) {
             <Button
                 buttonStyle={styles.btnAddReview}
                 titleStyle={styles.btnTitleAddReview}
-                title="Write a research"
+                title="Write a review"
                 icon={{
                     type: "material-community",
                     name: "square-edit-outline",

@@ -2,6 +2,7 @@ import React, { useState, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { AirbnbRating, Button, Input } from "react-native-elements";
 import Toast from "react-native-easy-toast";
+import Loading from "../../components/Loading";
 
 import { firebaseApp } from "../../utils/FireBase";
 import firebase from "firebase/app";
@@ -14,6 +15,7 @@ export default function AddReviewRestaurant(props) {
     const [rating, setRating] = useState(null);
     const [title, setTitle] = useState("");
     const [review, setReview] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const toastRef = useRef();
 
     const addReview = () => {
@@ -24,6 +26,7 @@ export default function AddReviewRestaurant(props) {
         } else if (!review) {
             toastRef.current.show("Comment is required");
         } else {
+            setIsLoading(true);
             const user = firebase.auth().currentUser;
             const payload = {
                 idUser: user.uid,
@@ -64,6 +67,7 @@ export default function AddReviewRestaurant(props) {
                     quantityVoting: quantityVoting
                 })
                 .then(() => {
+                    setIsLoading(false);
                     navigation.goBack();
                 });
         });
@@ -99,6 +103,7 @@ export default function AddReviewRestaurant(props) {
                 />
             </View>
             <Toast ref={toastRef} position="center" opacity={0.5} />
+            <Loading isVisible={isLoading} text="Sending comment" />
         </View>
     );
 }
