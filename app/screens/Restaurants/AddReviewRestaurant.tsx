@@ -3,6 +3,11 @@ import { StyleSheet, View } from "react-native";
 import { AirbnbRating, Button, Input } from "react-native-elements";
 import Toast from "react-native-easy-toast";
 
+import { firebaseApp } from "../../utils/FireBase";
+import firebase from "firebase/app";
+import "firebase/firestore";
+const db = firebase.firestore(firebaseApp);
+
 export default function AddReviewRestaurant(props) {
     const { navigation } = props;
     const idRestaurant = navigation.state.params.idRestaurant;
@@ -19,7 +24,27 @@ export default function AddReviewRestaurant(props) {
         } else if (!review) {
             toastRef.current.show("Comment is required");
         } else {
-            console.log("Comment sent");
+            const user = firebase.auth().currentUser;
+            const payload = {
+                idUser: user.uid,
+                avatarUser: user.photoURL,
+                idRestaurant: idRestaurant,
+                title: title,
+                review: review,
+                rating: rating,
+                createAt: new Date()
+            };
+
+            db.collection("reviews")
+                .add(payload)
+                .then(() => {
+                    console.log("Comment saved correctly");
+                })
+                .catch(() => {
+                    toastRef.current.show(
+                        "Error sending review. Try again later."
+                    );
+                });
         }
     };
 
