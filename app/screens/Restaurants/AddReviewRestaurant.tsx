@@ -38,7 +38,7 @@ export default function AddReviewRestaurant(props) {
             db.collection("reviews")
                 .add(payload)
                 .then(() => {
-                    console.log("Comment saved correctly");
+                    updateRestaurant();
                 })
                 .catch(() => {
                     toastRef.current.show(
@@ -46,6 +46,27 @@ export default function AddReviewRestaurant(props) {
                     );
                 });
         }
+    };
+
+    const updateRestaurant = () => {
+        const restaurantRef = db.collection("restaurants").doc(idRestaurant);
+
+        restaurantRef.get().then(response => {
+            const restaurantData = response.data();
+            const ratingTotal = restaurantData.ratingTotal + rating;
+            const quantityVoting = restaurantData.quantityVoting + 1;
+            const ratingResult = ratingTotal / quantityVoting;
+
+            restaurantRef
+                .update({
+                    rating: ratingResult,
+                    ratingTotal: ratingTotal,
+                    quantityVoting: quantityVoting
+                })
+                .then(() => {
+                    navigation.goBack();
+                });
+        });
     };
 
     return (
