@@ -94,7 +94,13 @@ function Restaurant(props) {
 
     return (
         <View style={styles.restaurant}>
-            <TouchableOpacity onPress={() => console.log("Go to restaurant")}>
+            <TouchableOpacity
+                onPress={() =>
+                    navigation.navigate("Restaurant", {
+                        restaurant: restaurant.item
+                    })
+                }
+            >
                 <Image
                     resizeMode="cover"
                     source={{
