@@ -61,6 +61,11 @@ export default function Favourites(props) {
         return Promise.all(arrayRestaurants);
     };
 
+    if (restaurants.length === 0)
+        return (
+            <NotFoundRestaurants setReloadRestaurants={setReloadRestaurants} />
+        );
+
     return (
         <View style={styles.viewBody}>
             <NavigationEvents onWillFocus={() => setReloadRestaurants(true)} />
@@ -190,6 +195,28 @@ function Restaurant(props) {
                     underlayColor="transparent"
                 />
             </View>
+        </View>
+    );
+}
+
+function NotFoundRestaurants(props) {
+    const { setReloadRestaurants } = props;
+    return (
+        <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+            <NavigationEvents onWillFocus={() => setReloadRestaurants(true)} />
+            <Icon
+                type="material-community"
+                name="alert-outline"
+                size={50}
+                color="#00A680"
+            />
+            <Text
+                style={{ fontSize: 20, fontWeight: "bold", color: "#00A680" }}
+            >
+                You don't have any restaurants on your list
+            </Text>
         </View>
     );
 }
