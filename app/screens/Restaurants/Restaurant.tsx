@@ -3,6 +3,7 @@ import { StyleSheet, View, ScrollView, Text, Dimensions } from "react-native";
 import { Rating, Icon, ListItem } from "react-native-elements";
 import CustomCarousel from "../../components/CustomCarousel";
 import Map from "../../components/Map";
+import ListReviews from "../../components/Restaurants/ListReviews";
 import * as firebase from "firebase";
 
 const screenWidth = Dimensions.get("window").width;
@@ -11,6 +12,7 @@ export default function Restaurant(props) {
     const { navigation } = props;
     const { restaurant } = navigation.state.params.restaurant.item;
     const [imagesRestaurant, setImagesRestaurant] = useState([]);
+    const [rating, setRating] = useState(restaurant.rating);
 
     useEffect(() => {
         const arrayUrls = [];
@@ -41,12 +43,17 @@ export default function Restaurant(props) {
             <RestaurantTitle
                 name={restaurant.name}
                 description={restaurant.description}
-                rating={restaurant.rating}
+                rating={rating}
             />
             <RestaurantInfo
                 location={restaurant.location}
                 name={restaurant.name}
                 address={restaurant.address}
+            />
+            <ListReviews
+                navigation={navigation}
+                idRestaurant={restaurant.id}
+                setRating={setRating}
             />
         </ScrollView>
     );
@@ -90,7 +97,7 @@ function RestaurantInfo(props) {
             </Text>
             <Map location={location} name={name} height={100} />
             {listInfo.map((item, idx) => (
-                <ListItem 
+                <ListItem
                     key={idx}
                     title={item.text}
                     leftIcon={{
@@ -98,7 +105,8 @@ function RestaurantInfo(props) {
                         type: item.iconType,
                         color: "#00A680"
                     }}
-                    containerStyle={styles.containerListItem}/>
+                    containerStyle={styles.containerListItem}
+                />
             ))}
         </View>
     );
