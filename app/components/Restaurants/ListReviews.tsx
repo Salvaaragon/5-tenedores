@@ -11,6 +11,11 @@ export default function ListReviews(props) {
     const { navigation, idRestaurant, setRating } = props;
     const [reviews, setReviews] = useState([]);
     const [reviewsReload, setReviewsReload] = useState(false);
+    const [userLogged, setUserLogged] = useState(false);
+
+    firebase.auth().onAuthStateChanged(user => {
+        user ? setUserLogged(true) : setUserLogged(false);
+    });
 
     useEffect(() => {
         (async () => {
@@ -45,22 +50,41 @@ export default function ListReviews(props) {
 
     return (
         <View>
-            <Button
-                buttonStyle={styles.btnAddReview}
-                titleStyle={styles.btnTitleAddReview}
-                title="Write a review"
-                icon={{
-                    type: "material-community",
-                    name: "square-edit-outline",
-                    color: "00A680"
-                }}
-                onPress={() =>
-                    navigation.navigate("AddReviewRestaurant", {
-                        idRestaurant: idRestaurant,
-                        setReviewsReload: setReviewsReload
-                    })
-                }
-            />
+            {userLogged ? (
+                <Button
+                    buttonStyle={styles.btnAddReview}
+                    titleStyle={styles.btnTitleAddReview}
+                    title="Write a review"
+                    icon={{
+                        type: "material-community",
+                        name: "square-edit-outline",
+                        color: "00A680"
+                    }}
+                    onPress={() =>
+                        navigation.navigate("AddReviewRestaurant", {
+                            idRestaurant: idRestaurant,
+                            setReviewsReload: setReviewsReload
+                        })
+                    }
+                />
+            ) : (
+                <View style={{ flex: 1 }}>
+                    <Text
+                        style={{
+                            textAlign: "center",
+                            color: "#00A680",
+                            padding: 20
+                        }}
+                        onPress={() => navigation.navigate("Login")}
+                    >
+                        Only users can write restaurant reviews {"\n"}
+                        <Text style={{ fontWeight: "bold" }}>
+                            Click HERE to log in
+                        </Text>
+                    </Text>
+                </View>
+            )}
+
             <FlatList
                 data={reviews}
                 renderItem={review => (
