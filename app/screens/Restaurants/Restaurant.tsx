@@ -13,6 +13,7 @@ export default function Restaurant(props) {
     const { restaurant } = navigation.state.params.restaurant.item;
     const [imagesRestaurant, setImagesRestaurant] = useState([]);
     const [rating, setRating] = useState(restaurant.rating);
+    const [isFavourite, setIsFavourite] = useState(false);
 
     useEffect(() => {
         const arrayUrls = [];
@@ -33,8 +34,26 @@ export default function Restaurant(props) {
         })();
     }, []);
 
+    const addFavourite = () => {
+        setIsFavourite(true);
+    };
+
+    const removeFavourite = () => {
+        setIsFavourite(false);
+    };
+
     return (
         <ScrollView style={styles.viewBody}>
+            <View style={styles.viewFavourites}>
+                <Icon
+                    type="material-community"
+                    name="heart"
+                    onPress={isFavourite ? removeFavourite : addFavourite}
+                    color={isFavourite ? "#00A680" : "#C2C2C2"}
+                    size={35}
+                    underlayColor="transparent"
+                />
+            </View>
             <CustomCarousel
                 arrayImages={imagesRestaurant}
                 width={screenWidth}
@@ -115,6 +134,18 @@ function RestaurantInfo(props) {
 const styles = StyleSheet.create({
     viewBody: {
         flex: 1
+    },
+    viewFavourites: {
+        position: "absolute",
+        top: 0,
+        right: 0,
+        zIndex: 2,
+        backgroundColor: "#FFF",
+        borderBottomLeftRadius: 35,
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 15,
+        paddingRight: 5
     },
     viewRestaurantTitle: {
         margin: 15
