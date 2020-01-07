@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { AirbnbRating, Button, Input } from "react-native-elements";
+import Toast from "react-native-easy-toast";
 
 export default function AddReviewRestaurant(props) {
     const { navigation } = props;
@@ -8,9 +9,18 @@ export default function AddReviewRestaurant(props) {
     const [rating, setRating] = useState(null);
     const [title, setTitle] = useState("");
     const [review, setReview] = useState("");
+    const toastRef = useRef();
 
     const addReview = () => {
-        console.log(rating);
+        if (rating === null) {
+            toastRef.current.show("You have not set any rating");
+        } else if (!title) {
+            toastRef.current.show("Title is required");
+        } else if (!review) {
+            toastRef.current.show("Comment is required");
+        } else {
+            console.log("Comment sent");
+        }
     };
 
     return (
@@ -42,6 +52,7 @@ export default function AddReviewRestaurant(props) {
                     buttonStyle={styles.btn}
                 />
             </View>
+            <Toast ref={toastRef} position="center" opacity={0.5} />
         </View>
     );
 }
