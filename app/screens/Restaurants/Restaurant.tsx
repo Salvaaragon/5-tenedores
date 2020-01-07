@@ -3,6 +3,7 @@ import { StyleSheet, View, ScrollView, Text, Dimensions } from "react-native";
 import { Rating, Icon, ListItem } from "react-native-elements";
 import CustomCarousel from "../../components/CustomCarousel";
 import Map from "../../components/Map";
+import ListReviews from "../../components/Restaurants/ListReviews";
 import * as firebase from "firebase";
 
 const screenWidth = Dimensions.get("window").width;
@@ -48,6 +49,7 @@ export default function Restaurant(props) {
                 name={restaurant.name}
                 address={restaurant.address}
             />
+            <ListReviews navigation={navigation} idRestaurant={restaurant.id} />
         </ScrollView>
     );
 }
@@ -90,7 +92,7 @@ function RestaurantInfo(props) {
             </Text>
             <Map location={location} name={name} height={100} />
             {listInfo.map((item, idx) => (
-                <ListItem 
+                <ListItem
                     key={idx}
                     title={item.text}
                     leftIcon={{
@@ -98,7 +100,8 @@ function RestaurantInfo(props) {
                         type: item.iconType,
                         color: "#00A680"
                     }}
-                    containerStyle={styles.containerListItem}/>
+                    containerStyle={styles.containerListItem}
+                />
             ))}
         </View>
     );
