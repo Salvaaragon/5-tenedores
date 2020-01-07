@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
     StyleSheet,
     View,
     Text,
     FlatList,
     ActivityIndicator,
-    TouchableOpacity
+    TouchableOpacity,
+    Alert
 } from "react-native";
 import { Image, Icon } from "react-native-elements";
+import Loading from "../components/Loading";
+import Toast from "react-native-easy-toast";
 
 import { firebaseApp } from "../utils/FireBase";
 import firebase from "firebase/app";
@@ -17,6 +20,9 @@ const db = firebase.firestore(firebaseApp);
 export default function Favourites(props) {
     const { navigation } = props;
     const [restaurants, setRestaurants] = useState([]);
+    const [reloadRestaurants, setReloadRestaurants] = useState(false);
+    const [isVisibleLoading, setIsVisibleLoading] = useState(false);
+    const toastRef = useRef();
 
     useEffect(() => {
         const idUser = firebase.auth().currentUser.uid;
@@ -39,7 +45,8 @@ export default function Favourites(props) {
                     setRestaurants(restaurants);
                 });
             });
-    }, []);
+        setReloadRestaurants(false);
+    }, [reloadRestaurants]);
 
     const getDataRestaurant = idRestaurantsArray => {
         const arrayRestaurants = [];
@@ -62,6 +69,9 @@ export default function Favourites(props) {
                         <Restaurant
                             restaurant={restaurant}
                             navigation={navigation}
+                            setIsVisibleLoading={setIsVisibleLoading}
+                            setReloadRestaurants={setReloadRestaurants}
+                            toastRef={toastRef}
                         />
                     )}
                     keyExtractor={(item, idx) => idx.toString()}
@@ -72,13 +82,21 @@ export default function Favourites(props) {
                     <Text>Loading restaurants</Text>
                 </View>
             )}
+            <Toast ref={toastRef} position="center" opacity={0.5} />
+            <Loading text="Deleting restaurant" isVisible={isVisibleLoading} />
         </View>
     );
 }
 
 function Restaurant(props) {
-    const { restaurant, navigation } = props;
-    const { name, images } = restaurant.item;
+    const {
+        restaurant,
+        navigation,
+        setIsVisibleLoading,
+        setReloadRestaurants,
+        toastRef
+    } = props;
+    const { id, name, images } = restaurant.item;
     const [imageRestaurant, setImageRestaurant] = useState(null);
 
     useEffect(() => {
@@ -91,6 +109,54 @@ function Restaurant(props) {
                 setImageRestaurant(response);
             });
     }, []);
+
+    const confirmRemoveFavourite = () => {
+        Alert.alert(
+            "Delete restaurant",
+            "Are you sure you want to delete the restaurant from your favourites list?",
+            [
+                {
+                    text: "Cancel",
+                    style: "cancel"
+                },
+                {
+                    text: "Delete",
+                    onPress: removeFavourite
+                }
+            ],
+            { cancelable: false }
+        );
+    };
+
+    const removeFavourite = () => {
+        setIsVisibleLoading(true);
+        db.collection("favourites")
+            .where("idRestaurant", "==", id)
+            .where("idUser", "==", firebase.auth().currentUser.uid)
+            .get()
+            .then(response => {
+                response.forEach(doc => {
+                    const idFavourite = doc.id;
+                    db.collection("favourites")
+                        .doc(idFavourite)
+                        .delete()
+                        .then(() => {
+                            setIsVisibleLoading(false);
+                            setReloadRestaurants(true);
+                            toastRef.current.show(
+                                "Restaurant deleted correctly",
+                                2000
+                            );
+                        })
+                        .catch(() => {
+                            toastRef.current.show(
+                                "Error deleting restaurant. Try again later",
+                                2000
+                            );
+                        });
+                });
+            });
+    };
 
     return (
         <View style={styles.restaurant}>
@@ -117,7 +183,7 @@ function Restaurant(props) {
                     name="heart"
                     color="#00A680"
                     containerStyle={styles.favourite}
-                    onPress={() => console.log("Delete from favourites")}
+                    onPress={confirmRemoveFavourite}
                     size={40}
                     underlayColor="transparent"
                 />
