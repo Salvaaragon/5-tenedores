@@ -16,7 +16,11 @@ export default function ListReviews(props) {
                     name: "square-edit-outline",
                     color: "00A680"
                 }}
-                onPress={() => console.log("Go to form")}
+                onPress={() =>
+                    navigation.navigate("AddReviewRestaurant", {
+                        idRestaurant: idRestaurant
+                    })
+                }
             />
             <Text>Comment list ...</Text>
         </View>
