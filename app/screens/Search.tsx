@@ -30,7 +30,46 @@ export default function Search(props) {
                 value={search}
                 containerStyle={styles.searchBar}
             />
+            {restaurants.length === 0 ? (
+                <View>
+                    <Text>Not found restaurants</Text>
+                </View>
+            ) : (
+                <FlatList
+                    data={restaurants}
+                    renderItem={restaurant => (
+                        <Restaurant restaurant={restaurant} />
+                    )}
+                    keyExtractor={(item, idx) => idx.toString()}
+                />
+            )}
         </View>
+    );
+}
+
+function Restaurant(props) {
+    const { restaurant } = props;
+    const { name, images } = restaurant.item;
+    const [imageRestaurant, setImageRestaurant] = useState(null);
+
+    useEffect(() => {
+        const image = images[0];
+        firebase
+            .storage()
+            .ref(`restaurant-images/${image}`)
+            .getDownloadURL()
+            .then(response => {
+                setImageRestaurant(response);
+            });
+    }, []);
+
+    return (
+        <ListItem
+            title={name} 
+            leftAvatar={{ source: {uri: imageRestaurant}}}
+            rightIcon={<Icon type="material-community" name="chevron-right"/>}
+            onPress={() => console.log("Go to restaurant")}
+        />
     );
 }
 
