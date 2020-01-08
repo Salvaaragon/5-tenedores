@@ -31,9 +31,7 @@ export default function Search(props) {
                 containerStyle={styles.searchBar}
             />
             {restaurants.length === 0 ? (
-                <View>
-                    <Text>Not found restaurants</Text>
-                </View>
+                <NotFoundRestaurants />
             ) : (
                 <FlatList
                     data={restaurants}
@@ -77,6 +75,18 @@ function Restaurant(props) {
                 })
             }
         />
+    );
+}
+
+function NotFoundRestaurants() {
+    return (
+        <View style={{ flex: 1, alignItems: "center" }}>
+            <Image
+                source={require("../../assets/img/no-result-found.png")}
+                resizeMode="cover"
+                style={{ width: 200, height: 200 }}
+            />
+        </View>
     );
 }
 
