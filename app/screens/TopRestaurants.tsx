@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import Toast from "react-native-easy-toast";
 import ListTopRestaurants from "../components/Ranking/ListTopRestaurants";
 
@@ -36,7 +36,7 @@ export default function TopRestaurants(props) {
     }, []);
 
     return (
-        <View>
+        <View style={styles.viewBody}>
             <ListTopRestaurants
                 restaurants={restaurants}
                 navigation={navigation}
@@ -45,3 +45,9 @@ export default function TopRestaurants(props) {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    viewBody: {
+        backgroundColor: "#EBEBEB"
+    }
+});
