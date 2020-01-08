@@ -19,7 +19,12 @@ export default function Restaurant(props) {
     const [imagesRestaurant, setImagesRestaurant] = useState([]);
     const [rating, setRating] = useState(restaurant.rating);
     const [isFavourite, setIsFavourite] = useState(false);
+    const [userLogged, setUserLogged] = useState(false);
     const toastRef = useRef();
+
+    firebase.auth().onAuthStateChanged(user => {
+        user ? setUserLogged(true) : setUserLogged(false);
+    });
 
     useEffect(() => {
         const arrayUrls = [];
@@ -41,38 +46,47 @@ export default function Restaurant(props) {
     }, []);
 
     useEffect(() => {
-        db.collection("favourites")
-            .where("idRestaurant", "==", restaurant.id)
-            .where("idUser", "==", firebase.auth().currentUser.uid)
-            .get()
-            .then(response => {
-                if (response.docs.length === 1) {
-                    setIsFavourite(true);
-                }
-            });
+        if (userLogged) {
+            db.collection("favourites")
+                .where("idRestaurant", "==", restaurant.id)
+                .where("idUser", "==", firebase.auth().currentUser.uid)
+                .get()
+                .then(response => {
+                    if (response.docs.length === 1) {
+                        setIsFavourite(true);
+                    }
+                });
+        }
     }, []);
 
     const addFavourite = () => {
-        const payload = {
-            idUser: firebase.auth().currentUser.uid,
-            idRestaurant: restaurant.id
-        };
+        if (!userLogged) {
+            toastRef.current.show(
+                "Only logged users can mark restaurants as favourite",
+                2000
+            );
+        } else {
+            const payload = {
+                idUser: firebase.auth().currentUser.uid,
+                idRestaurant: restaurant.id
+            };
 
-        db.collection("favourites")
-            .add(payload)
-            .then(() => {
-                setIsFavourite(true);
-                toastRef.current.show(
-                    "Restaurant added to your favourites list",
-                    2000
-                );
-            })
-            .catch(() => {
-                toastRef.current.show(
-                    "Error adding restaurant to your favourites list. Try again later",
-                    2000
-                );
-            });
+            db.collection("favourites")
+                .add(payload)
+                .then(() => {
+                    setIsFavourite(true);
+                    toastRef.current.show(
+                        "Restaurant added to your favourites list",
+                        2000
+                    );
+                })
+                .catch(() => {
+                    toastRef.current.show(
+                        "Error adding restaurant to your favourites list. Try again later",
+                        2000
+                    );
+                });
+        }
     };
 
     const removeFavourite = () => {

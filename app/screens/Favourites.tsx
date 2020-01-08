@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Alert
 } from "react-native";
-import { Image, Icon } from "react-native-elements";
+import { Image, Icon, Button } from "react-native-elements";
 import Loading from "../components/Loading";
 import Toast from "react-native-easy-toast";
 import { NavigationEvents } from "react-navigation";
@@ -23,29 +23,36 @@ export default function Favourites(props) {
     const [restaurants, setRestaurants] = useState([]);
     const [reloadRestaurants, setReloadRestaurants] = useState(false);
     const [isVisibleLoading, setIsVisibleLoading] = useState(false);
+    const [userLogged, setUserLogged] = useState(false);
     const toastRef = useRef();
 
-    useEffect(() => {
-        const idUser = firebase.auth().currentUser.uid;
-        db.collection("favourites")
-            .where("idUser", "==", idUser)
-            .get()
-            .then(response => {
-                const idRestaurantsArray = [];
-                response.forEach(doc => {
-                    idRestaurantsArray.push(doc.data().idRestaurant);
-                });
+    firebase.auth().onAuthStateChanged(user => {
+        user ? setUserLogged(true) : setUserLogged(false);
+    });
 
-                getDataRestaurant(idRestaurantsArray).then(response => {
-                    const restaurants = [];
+    useEffect(() => {
+        if (userLogged) {
+            const idUser = firebase.auth().currentUser.uid;
+            db.collection("favourites")
+                .where("idUser", "==", idUser)
+                .get()
+                .then(response => {
+                    const idRestaurantsArray = [];
                     response.forEach(doc => {
-                        let restaurant = doc.data();
-                        restaurant.id = doc.id;
-                        restaurants.push(restaurant);
+                        idRestaurantsArray.push(doc.data().idRestaurant);
                     });
-                    setRestaurants(restaurants);
+
+                    getDataRestaurant(idRestaurantsArray).then(response => {
+                        const restaurants = [];
+                        response.forEach(doc => {
+                            let restaurant = doc.data();
+                            restaurant.id = doc.id;
+                            restaurants.push(restaurant);
+                        });
+                        setRestaurants(restaurants);
+                    });
                 });
-            });
+        }
         setReloadRestaurants(false);
     }, [reloadRestaurants]);
 
@@ -60,6 +67,15 @@ export default function Favourites(props) {
         });
         return Promise.all(arrayRestaurants);
     };
+
+    if (!userLogged) {
+        return (
+            <UserNoLogged
+                setReloadRestaurants={setReloadRestaurants}
+                navigation={navigation}
+            />
+        );
+    }
 
     if (restaurants.length === 0)
         return (
@@ -217,6 +233,40 @@ function NotFoundRestaurants(props) {
             >
                 You don't have any restaurants on your list
             </Text>
+        </View>
+    );
+}
+
+function UserNoLogged(props) {
+    const { setReloadRestaurants, navigation } = props;
+
+    return (
+        <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+        >
+            <NavigationEvents onWillFocus={() => setReloadRestaurants(true)} />
+            <Icon
+                type="material-community"
+                name="alert-outline"
+                size={50}
+                color="#00A680"
+            />
+            <Text
+                style={{
+                    fontSize: 20,
+                    fontWeight: "bold",
+                    color: "#00A680",
+                    textAlign: "center"
+                }}
+            >
+                Only logged users can access to this section
+            </Text>
+            <Button
+                title="Go to login"
+                onPress={() => navigation.navigate("Login")}
+                containerStyle={{ marginTop: 20, width: "80%" }}
+                buttonStyle={{ backgroundColor: "#00A680" }}
+            />
         </View>
     );
 }
