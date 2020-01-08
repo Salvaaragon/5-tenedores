@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, Image } from "react-native";
 import { SearchBar, ListItem, Icon } from "react-native-elements";
+import { useDebouncedCallback } from "use-debounce";
 import * as firebase from "firebase";
 import { FireSQL } from "firesql";
 import firebaseApp from "firebase/app";
@@ -13,6 +14,10 @@ export default function Search(props) {
     const [search, setSearch] = useState("");
 
     useEffect(() => {
+        onSearch();
+    }, [search]);
+
+    const [onSearch] = useDebouncedCallback(() => {
         if (search) {
             fireSQL
                 .query(`SELECT * FROM restaurants WHERE name LIKE '${search}%'`)
@@ -20,7 +25,7 @@ export default function Search(props) {
                     setRestaurants(response);
                 });
         }
-    }, [search]);
+    }, 300);
 
     return (
         <View>
