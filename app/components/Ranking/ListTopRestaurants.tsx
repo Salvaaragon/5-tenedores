@@ -40,10 +40,52 @@ function Restaurant(props) {
     }, []);
 
     return (
-        <View>
-            <Text>Restaurant</Text>
-        </View>
+        <TouchableOpacity onPress={() => console.log("Go to restaurant")}>
+            <Card containerStyle={styles.containerCard}>
+                <Image
+                    style={styles.restaurantImage}
+                    resizeMode="cover"
+                    source={{ uri: imageRestaurant }}
+                />
+                <View style={styles.titleRating}>
+                    <Text style={styles.title}>{name}</Text>
+                    <Rating
+                        imageSize={20}
+                        startingValue={rating}
+                        readonly
+                        style={styles.rating}
+                    />
+                </View>
+                <Text style={styles.description}>{description}</Text>
+            </Card>
+        </TouchableOpacity>
     );
 }
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    containerCard: {
+        marginBottom: 10,
+        borderWidth: 0
+    },
+    restaurantImage: {
+        width: "100%",
+        height: 200
+    },
+    titleRating: {
+        flexDirection: "row",
+        marginTop: 20
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: "bold"
+    },
+    rating: {
+        position: "absolute",
+        right: 0
+    },
+    description: {
+        color: "grey",
+        marginTop: 0,
+        textAlign: "justify"
+    }
+});
