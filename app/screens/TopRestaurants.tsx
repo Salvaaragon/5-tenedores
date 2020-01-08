@@ -8,6 +8,7 @@ import {
     TouchableOpacity
 } from "react-native";
 import { Card, Image, Rating } from "react-native-elements";
+import Toast from "react-native-easy-toast";
 
 import { firebaseApp } from "../utils/FireBase";
 import firebase from "firebase/app";
@@ -16,6 +17,7 @@ const db = firebase.firestore(firebaseApp);
 
 export default function TopRestaurants() {
     const [restaurants, setRestaurants] = useState([]);
+    const toastRef = useRef();
 
     useEffect(() => {
         (async () => {
@@ -31,7 +33,10 @@ export default function TopRestaurants() {
                     setRestaurants(restaurantsArray);
                 })
                 .catch(() => {
-                    console.log("Error loading ranking. Try again later");
+                    toastRef.current.show(
+                        "Error loading ranking. Try again later",
+                        2000
+                    );
                 });
         })();
     }, []);
@@ -39,6 +44,7 @@ export default function TopRestaurants() {
     return (
         <View>
             <Text>We are on restaurants ranking</Text>
+            <Toast ref={toastRef} position="center" opacity={0.5} />
         </View>
     );
 }
