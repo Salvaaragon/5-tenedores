@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button } from "react-native-elements";
+import { Button, Header, Icon } from "react-native-elements";
 import * as firebase from "firebase";
 import InfoUser from "../../components/Account/InfoUser";
 import Toast from "react-native-easy-toast";
@@ -24,6 +24,13 @@ export default function UserLogged() {
 
     return (
         <View style={styles.viewUserInfo}>
+            <Header
+                backgroundColor="#00A680"
+                centerComponent={{
+                    text: "User profile",
+                    style: { fontSize: 20, color: "white" }
+                }}
+            />
             <InfoUser
                 userInfo={userInfo}
                 setReloadData={setReloadData}
@@ -51,6 +58,13 @@ const styles = StyleSheet.create({
     viewUserInfo: {
         minHeight: "100%",
         backgroundColor: "#F2F2F2"
+    },
+    headerIcon: {
+        borderRadius: 100,
+        borderColor: "white",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 5
     },
     btnLogout: {
         marginTop: 30,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { StyleSheet, View, ScrollView, Text, Dimensions } from "react-native";
-import { Rating, Icon, ListItem } from "react-native-elements";
+import { Rating, Icon, ListItem, Header } from "react-native-elements";
 import CustomCarousel from "../../components/CustomCarousel";
 import Map from "../../components/Map";
 import ListReviews from "../../components/Restaurants/ListReviews";
@@ -120,6 +120,26 @@ export default function Restaurant(props) {
 
     return (
         <ScrollView style={styles.viewBody}>
+            <Header
+                backgroundColor="#00A680"
+                leftComponent={
+                    <Icon
+                        type="material-community"
+                        name="arrow-left"
+                        color="white"
+                        containerStyle={styles.headerIcon}
+                        onPress={() =>
+                            navigation.navigate(
+                                navigation.state.params.prevSection
+                            )
+                        }
+                    />
+                }
+                centerComponent={{
+                    text: restaurant.name,
+                    style: { fontSize: 20, color: "white" }
+                }}
+            />
             <View style={styles.viewFavourites}>
                 <Icon
                     type="material-community"
@@ -212,9 +232,16 @@ const styles = StyleSheet.create({
     viewBody: {
         flex: 1
     },
+    headerIcon: {
+        borderRadius: 100,
+        borderColor: "white",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 5
+    },
     viewFavourites: {
         position: "absolute",
-        top: 0,
+        top: 80,
         right: 0,
         zIndex: 2,
         backgroundColor: "#FFF",

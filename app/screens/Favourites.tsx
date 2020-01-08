@@ -8,7 +8,7 @@ import {
     TouchableOpacity,
     Alert
 } from "react-native";
-import { Image, Icon, Button } from "react-native-elements";
+import { Image, Icon, Button, Header } from "react-native-elements";
 import Loading from "../components/Loading";
 import Toast from "react-native-easy-toast";
 import { NavigationEvents } from "react-navigation";
@@ -70,20 +70,47 @@ export default function Favourites(props) {
 
     if (!userLogged) {
         return (
-            <UserNoLogged
-                setReloadRestaurants={setReloadRestaurants}
-                navigation={navigation}
-            />
+            <>
+                <Header
+                    backgroundColor="#00A680"
+                    centerComponent={{
+                        text: "Favourite restaurants",
+                        style: { fontSize: 20, color: "white" }
+                    }}
+                />
+                <UserNoLogged
+                    setReloadRestaurants={setReloadRestaurants}
+                    navigation={navigation}
+                />
+            </>
         );
     }
 
     if (restaurants.length === 0)
         return (
-            <NotFoundRestaurants setReloadRestaurants={setReloadRestaurants} />
+            <>
+                <Header
+                    backgroundColor="#00A680"
+                    centerComponent={{
+                        text: "Favourite restaurants",
+                        style: { fontSize: 20, color: "white" }
+                    }}
+                />
+                <NotFoundRestaurants
+                    setReloadRestaurants={setReloadRestaurants}
+                />
+            </>
         );
 
     return (
         <View style={styles.viewBody}>
+            <Header
+                backgroundColor="#00A680"
+                centerComponent={{
+                    text: "Favourite restaurants",
+                    style: { fontSize: 20, color: "white" }
+                }}
+            />
             <NavigationEvents onWillFocus={() => setReloadRestaurants(true)} />
             {restaurants ? (
                 <FlatList
@@ -276,6 +303,13 @@ const styles = StyleSheet.create({
     viewBody: {
         flex: 1,
         backgroundColor: "#F2F2F2"
+    },
+    headerIcon: {
+        borderRadius: 100,
+        borderColor: "white",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 5
     },
     loaderRestaurants: {
         marginTop: 10,

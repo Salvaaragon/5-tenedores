@@ -1,5 +1,6 @@
 import React, { useState, useRef } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Header, Icon } from "react-native-elements";
 import Toast from "react-native-easy-toast";
 import Loading from "../../components/Loading";
 import AddRestaurantForm from "../../components/Restaurants/AddRestaurantForm";
@@ -12,6 +13,22 @@ export default function AddRestaurant(props) {
 
     return (
         <View>
+            <Header
+                backgroundColor="#00A680"
+                leftComponent={
+                    <Icon
+                        type="material-community"
+                        name="arrow-left"
+                        color="white"
+                        containerStyle={styles.headerIcon}
+                        onPress={() => navigation.navigate("Restaurants")}
+                    />
+                }
+                centerComponent={{
+                    text: "Top restaurants",
+                    style: { fontSize: 20, color: "white" }
+                }}
+            />
             <AddRestaurantForm
                 toastRef={toastRef}
                 setIsLoading={setIsLoading}
@@ -23,3 +40,13 @@ export default function AddRestaurant(props) {
         </View>
     );
 }
+
+const styles = StyleSheet.create({
+    headerIcon: {
+        borderRadius: 100,
+        borderColor: "white",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 5
+    }
+});

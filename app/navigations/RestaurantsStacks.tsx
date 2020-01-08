@@ -10,39 +10,25 @@ const RestaurantsScreenStacks = createStackNavigator({
     Restaurants: {
         screen: RestaurantsScreen,
         navigationOptions: () => ({
-            title: "Restaurants"
+            header: null
         })
     },
     AddRestaurant: {
         screen: AddRestaurantScreen,
         navigationOptions: () => ({
-            title: "New restaurant"
+            header: null
         })
     },
     Restaurant: {
         screen: RestaurantScreen,
         navigationOptions: props => ({
-            title: props.navigation.state.params.restaurant.name,
-            headerLeft: () => (
-                <Icon
-                    type="material-community"
-                    name="arrow-left"
-                    onPress={() => {
-                        props.navigation.navigate("Restaurants");
-                        props.navigation.navigate(
-                            props.navigation.state.params.prevSection
-                        );
-                    }}
-                    size={25}
-                    containerStyle={{ marginLeft: 10 }}
-                />
-            )
+            header: null
         })
     },
     AddReviewRestaurant: {
         screen: AddReviewRestaurantScreen,
         navigationOptions: props => ({
-            title: "New comment"
+            header: null
         })
     }
 });

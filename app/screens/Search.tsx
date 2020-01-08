@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, FlatList, Image } from "react-native";
-import { SearchBar, ListItem, Icon } from "react-native-elements";
+import { SearchBar, ListItem, Icon, Header } from "react-native-elements";
 import { useDebouncedCallback } from "use-debounce";
 import * as firebase from "firebase";
 import { FireSQL } from "firesql";
@@ -29,6 +29,13 @@ export default function Search(props) {
 
     return (
         <View>
+            <Header
+                backgroundColor="#00A680"
+                centerComponent={{
+                    text: "Search restaurants",
+                    style: { fontSize: 20, color: "white" }
+                }}
+            />
             <SearchBar
                 placeholder="Search restaurant..."
                 onChangeText={e => setSearch(e)}
@@ -99,5 +106,12 @@ function NotFoundRestaurants() {
 const styles = StyleSheet.create({
     searchBar: {
         marginBottom: 20
+    },
+    headerIcon: {
+        borderRadius: 100,
+        borderColor: "white",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 5
     }
 });

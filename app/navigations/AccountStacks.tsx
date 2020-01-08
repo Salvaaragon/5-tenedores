@@ -7,7 +7,7 @@ const AccountScreenStacks = createStackNavigator({
     MyAccount: {
         screen: MyAccountScreen,
         navigationOptions: () => ({
-            title: "My account"
+            header: null
         })
     },
     Login: {
