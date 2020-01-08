@@ -27,6 +27,7 @@ function Restaurant(props) {
     const { restaurant, navigation } = props;
     const { name, description, images, rating } = restaurant.item;
     const [imageRestaurant, setImageRestaurant] = useState(null);
+    const [iconColor, setIconColor] = useState("#000");
 
     useEffect(() => {
         const image = images[0];
@@ -39,9 +40,26 @@ function Restaurant(props) {
             });
     }, []);
 
+    useEffect(() => {
+        if (restaurant.index === 0) {
+            setIconColor("#EFB819");
+        } else if (restaurant.index === 1) {
+            setIconColor("#8A9597");
+        } else if (restaurant.index === 2) {
+            setIconColor("#CD7F32");
+        }
+    });
+
     return (
         <TouchableOpacity onPress={() => console.log("Go to restaurant")}>
             <Card containerStyle={styles.containerCard}>
+                <Icon
+                    type="material-community"
+                    name="chess-queen"
+                    color={iconColor}
+                    size={40}
+                    containerStyle={styles.containerIcon}
+                />
                 <Image
                     style={styles.restaurantImage}
                     resizeMode="cover"
@@ -66,6 +84,15 @@ const styles = StyleSheet.create({
     containerCard: {
         marginBottom: 10,
         borderWidth: 0
+    },
+    containerIcon: {
+        position: "absolute",
+        top: 10,
+        right: 10,
+        zIndex: 1,
+        backgroundColor: "white",
+        borderRadius: 30,
+        padding: 5
     },
     restaurantImage: {
         width: "100%",
