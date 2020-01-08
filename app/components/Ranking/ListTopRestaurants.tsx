@@ -54,7 +54,8 @@ function Restaurant(props) {
         <TouchableOpacity
             onPress={() =>
                 navigation.navigate("Restaurant", {
-                    restaurant: restaurant.item
+                    restaurant: restaurant.item,
+                    prevSection: "TopLists"
                 })
             }
         >

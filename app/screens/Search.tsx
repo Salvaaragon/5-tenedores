@@ -76,7 +76,8 @@ function Restaurant(props) {
             rightIcon={<Icon type="material-community" name="chevron-right" />}
             onPress={() =>
                 navigation.navigate("Restaurant", {
-                    restaurant: restaurant.item
+                    restaurant: restaurant.item,
+                    prevSection: "Search"
                 })
             }
         />
