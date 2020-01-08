@@ -38,7 +38,10 @@ export default function Search(props) {
                 <FlatList
                     data={restaurants}
                     renderItem={restaurant => (
-                        <Restaurant restaurant={restaurant} />
+                        <Restaurant
+                            restaurant={restaurant}
+                            navigation={navigation}
+                        />
                     )}
                     keyExtractor={(item, idx) => idx.toString()}
                 />
@@ -48,7 +51,7 @@ export default function Search(props) {
 }
 
 function Restaurant(props) {
-    const { restaurant } = props;
+    const { restaurant, navigation } = props;
     const { name, images } = restaurant.item;
     const [imageRestaurant, setImageRestaurant] = useState(null);
 
@@ -65,10 +68,14 @@ function Restaurant(props) {
 
     return (
         <ListItem
-            title={name} 
-            leftAvatar={{ source: {uri: imageRestaurant}}}
-            rightIcon={<Icon type="material-community" name="chevron-right"/>}
-            onPress={() => console.log("Go to restaurant")}
+            title={name}
+            leftAvatar={{ source: { uri: imageRestaurant } }}
+            rightIcon={<Icon type="material-community" name="chevron-right" />}
+            onPress={() =>
+                navigation.navigate("Restaurant", {
+                    restaurant: restaurant.item
+                })
+            }
         />
     );
 }
