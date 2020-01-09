@@ -115,6 +115,12 @@ export default function AddReviewRestaurant(props) {
                     containerStyle={styles.btnContainer}
                     buttonStyle={styles.btn}
                 />
+                <Button
+                    title="Cancel"
+                    onPress={() => navigation.navigate("Restaurants")}
+                    containerStyle={styles.btnContainer}
+                    buttonStyle={styles.btnCancel}
+                />
             </View>
             <Toast ref={toastRef} position="center" opacity={0.5} />
             <Loading isVisible={isLoading} text="Sending comment" />
@@ -125,13 +131,6 @@ export default function AddReviewRestaurant(props) {
 const styles = StyleSheet.create({
     viewBody: {
         flex: 1
-    },
-    headerIcon: {
-        borderRadius: 100,
-        borderColor: "white",
-        borderStyle: "solid",
-        borderWidth: 2,
-        padding: 5
     },
     viewRating: {
         height: 110,
@@ -153,13 +152,14 @@ const styles = StyleSheet.create({
         margin: 0
     },
     btnContainer: {
-        flex: 1,
         justifyContent: "center",
-        marginTop: 20,
-        marginBottom: 10,
+        marginTop: 10,
         width: "95%"
     },
     btn: {
         backgroundColor: "#00A680"
+    },
+    btnCancel: {
+        backgroundColor: "#C2C2C2"
     }
 });
