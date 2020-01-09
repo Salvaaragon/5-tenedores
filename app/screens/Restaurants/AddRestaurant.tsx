@@ -4,6 +4,7 @@ import { Header, Icon } from "react-native-elements";
 import Toast from "react-native-easy-toast";
 import Loading from "../../components/Loading";
 import AddRestaurantForm from "../../components/Restaurants/AddRestaurantForm";
+import { ScrollView } from "react-native-gesture-handler";
 
 export default function AddRestaurant(props) {
     const { navigation } = props;
@@ -12,7 +13,7 @@ export default function AddRestaurant(props) {
     const [isLoading, setIsLoading] = useState(false);
 
     return (
-        <View>
+        <>
             <Header
                 backgroundColor="#00A680"
                 leftComponent={
@@ -29,15 +30,17 @@ export default function AddRestaurant(props) {
                     style: { fontSize: 20, color: "white" }
                 }}
             />
-            <AddRestaurantForm
-                toastRef={toastRef}
-                setIsLoading={setIsLoading}
-                navigation={navigation}
-                setIsReloadRestaurants={setIsReloadRestaurants}
-            />
-            <Toast ref={toastRef} position="center" opacity={0.5} />
-            <Loading isVisible={isLoading} text={"Adding new restaurant"} />
-        </View>
+            <ScrollView>
+                <AddRestaurantForm
+                    toastRef={toastRef}
+                    setIsLoading={setIsLoading}
+                    navigation={navigation}
+                    setIsReloadRestaurants={setIsReloadRestaurants}
+                />
+                <Toast ref={toastRef} position="center" opacity={0.5} />
+                <Loading isVisible={isLoading} text={"Adding new restaurant"} />
+            </ScrollView>
+        </>
     );
 }
 
