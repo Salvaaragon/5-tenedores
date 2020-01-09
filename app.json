@@ -27,7 +27,13 @@
       "supportsTablet": true
     },
     "android": {
-      "permissions": ["CAMERA_ROLL", "LOCATION"]
-    }
+      "package": "com.salvadoraragon.cincotenedores",
+      "permissions": [
+        "CAMERA_ROLL",
+        "LOCATION"
+      ],
+    },
+    "description": "Aplicación de valoración de restaurantes",
+    "githubUrl": "https://github.com/Salvaaragon/5-tenedores",
   }
 }
