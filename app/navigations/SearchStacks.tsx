@@ -5,7 +5,7 @@ const SearchScreenStacks = createStackNavigator({
     Restaurants: {
         screen: SearchScreen,
         navigationOptions: () => ({
-            title: "Search your restaurant"
+            header: null
         })
     }
 });

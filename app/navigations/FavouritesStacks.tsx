@@ -5,7 +5,7 @@ const FavouritesScreenStacks = createStackNavigator({
     Favourites: {
         screen: FavouritesScreen,
         navigationOptions: () => ({
-            title: "Favourite restaurants"
+            header: null
         })
     }
 });

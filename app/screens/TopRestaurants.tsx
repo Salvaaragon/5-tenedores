@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { View, StyleSheet } from "react-native";
+import { Header, Icon } from "react-native-elements";
 import Toast from "react-native-easy-toast";
 import ListTopRestaurants from "../components/Ranking/ListTopRestaurants";
 
@@ -39,6 +40,13 @@ export default function TopRestaurants(props) {
 
     return (
         <View style={styles.viewBody}>
+            <Header
+                backgroundColor="#00A680"
+                centerComponent={{
+                    text: "Top restaurants",
+                    style: { fontSize: 20, color: "white" }
+                }}
+            />
             <ListTopRestaurants
                 restaurants={restaurants}
                 navigation={navigation}
@@ -51,5 +59,12 @@ export default function TopRestaurants(props) {
 const styles = StyleSheet.create({
     viewBody: {
         backgroundColor: "#EBEBEB"
+    },
+    headerIcon: {
+        borderRadius: 100,
+        borderColor: "white",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 5
     }
 });

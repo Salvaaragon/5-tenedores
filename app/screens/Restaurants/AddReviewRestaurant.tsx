@@ -1,6 +1,12 @@
 import React, { useState, useRef } from "react";
 import { StyleSheet, View } from "react-native";
-import { AirbnbRating, Button, Input } from "react-native-elements";
+import {
+    AirbnbRating,
+    Button,
+    Input,
+    Header,
+    Icon
+} from "react-native-elements";
 import Toast from "react-native-easy-toast";
 import Loading from "../../components/Loading";
 
@@ -76,6 +82,13 @@ export default function AddReviewRestaurant(props) {
 
     return (
         <View style={styles.viewBody}>
+            <Header
+                backgroundColor="#00A680"
+                centerComponent={{
+                    text: "New review",
+                    style: { fontSize: 20, color: "white" }
+                }}
+            />
             <View style={styles.viewRating}>
                 <AirbnbRating
                     count={5}
@@ -112,6 +125,13 @@ export default function AddReviewRestaurant(props) {
 const styles = StyleSheet.create({
     viewBody: {
         flex: 1
+    },
+    headerIcon: {
+        borderRadius: 100,
+        borderColor: "white",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 5
     },
     viewRating: {
         height: 110,

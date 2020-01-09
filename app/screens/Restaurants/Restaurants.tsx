@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, StyleSheet } from "react-native";
+import { Header, Icon } from "react-native-elements";
 import ActionButton from "react-native-action-button";
 import ListRestaurants from "../../components/Restaurants/ListRestaurants";
 
@@ -83,6 +84,13 @@ export default function Restaurants(props) {
 
     return (
         <View style={styles.viewBody}>
+            <Header
+                backgroundColor="#00A680"
+                centerComponent={{
+                    text: "Restaurants",
+                    style: { fontSize: 20, color: "white" }
+                }}
+            />
             <ListRestaurants
                 restaurants={restaurants}
                 isLoading={isLoading}
@@ -114,5 +122,12 @@ function AddRestaurantButton(props) {
 const styles = StyleSheet.create({
     viewBody: {
         flex: 1
+    },
+    headerIcon: {
+        borderRadius: 100,
+        borderColor: "white",
+        borderStyle: "solid",
+        borderWidth: 2,
+        padding: 5
     }
 });
