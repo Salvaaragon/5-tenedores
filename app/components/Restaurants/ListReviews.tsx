@@ -58,7 +58,7 @@ export default function ListReviews(props) {
                     icon={{
                         type: "material-community",
                         name: "square-edit-outline",
-                        color: "00A680"
+                        color: "#00A680"
                     }}
                     onPress={() =>
                         navigation.navigate("AddReviewRestaurant", {
