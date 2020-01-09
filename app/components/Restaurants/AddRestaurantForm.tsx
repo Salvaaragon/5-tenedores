@@ -26,12 +26,14 @@ export default function AddRestaurantForm(props) {
     const [restaurantName, setRestaurantName] = useState("");
     const [restaurantAddress, setRestaurantAddress] = useState("");
     const [restaurantDescription, setRestaurantDescription] = useState("");
+    const [restaurantWebsite, setRestaurantWebsite] = useState(null);
+    const [restaurantPhone, setRestaurantPhone] = useState(null);
     const [isVisibleMap, setIsVisibleMap] = useState(false);
     const [locationRestaurant, setLocationRestaurant] = useState(null);
 
     const addRestaurant = () => {
         if (!restaurantName || !restaurantAddress || !restaurantDescription) {
-            toastRef.current.show("All fields are required");
+            toastRef.current.show("Some fields are required");
         } else if (imagesSelected.length === 0) {
             toastRef.current.show("Restaurant need at least one picture");
         } else if (!locationRestaurant) {
@@ -44,6 +46,8 @@ export default function AddRestaurantForm(props) {
                         name: restaurantName,
                         address: restaurantAddress,
                         description: restaurantDescription,
+                        website: restaurantWebsite,
+                        phone: restaurantPhone,
                         location: locationRestaurant,
                         images: arrayImages,
                         rating: 0,
@@ -93,6 +97,8 @@ export default function AddRestaurantForm(props) {
                 setRestaurantName={setRestaurantName}
                 setRestaurantAddress={setRestaurantAddress}
                 setRestaurantDescription={setRestaurantDescription}
+                setRestaurantWebsite={setRestaurantWebsite}
+                setRestaurantPhone={setRestaurantPhone}
                 setIsVisibleMap={setIsVisibleMap}
                 locationRestaurant={locationRestaurant}
             />
@@ -220,18 +226,20 @@ function FormAdd(props) {
         setRestaurantName,
         setRestaurantAddress,
         setRestaurantDescription,
+        setRestaurantWebsite,
+        setRestaurantPhone,
         setIsVisibleMap,
         locationRestaurant
     } = props;
     return (
         <View style={styles.viewForm}>
             <Input
-                placeholder="Restaurant name"
+                placeholder="Restaurant name *"
                 containerStyle={styles.input}
                 onChange={e => setRestaurantName(e.nativeEvent.text)}
             />
             <Input
-                placeholder="Address"
+                placeholder="Address *"
                 containerStyle={styles.input}
                 rightIcon={{
                     type: "material-community",
@@ -242,9 +250,19 @@ function FormAdd(props) {
                 onChange={e => setRestaurantAddress(e.nativeEvent.text)}
             />
             <Input
-                placeholder="Restaurant description"
+                placeholder="Website"
+                containerStyle={styles.input}
+                onChange={e => setRestaurantWebsite(e.nativeEvent.text)}
+            />
+            <Input
+                placeholder="Phone"
+                containerStyle={styles.input}
+                onChange={e => setRestaurantPhone(e.nativeEvent.text)}
+            />
+            <Input
+                placeholder="Restaurant description *"
                 multiline={true}
-                containerStyle={styles.textArea}
+                inputContainerStyle={styles.textArea}
                 onChange={e => setRestaurantDescription(e.nativeEvent.text)}
             />
         </View>
@@ -346,13 +364,13 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginRight: 10,
-        height: 70,
-        width: 70,
+        height: 60,
+        width: 60,
         backgroundColor: "#E3E3E3"
     },
     miniatureStyle: {
-        width: 70,
-        height: 70,
+        width: 60,
+        height: 60,
         marginRight: 10
     },
     viewForm: {
@@ -363,7 +381,7 @@ const styles = StyleSheet.create({
         marginBottom: 10
     },
     textArea: {
-        height: 100,
+        maxHeight: 100,
         width: "100%",
         padding: 0,
         margin: 0
