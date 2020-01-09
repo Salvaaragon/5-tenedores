@@ -19,6 +19,7 @@ export default function ListTopRestaurants(props) {
                 <Restaurant restaurant={restaurant} navigation={navigation} />
             )}
             keyExtractor={(item, idx) => idx.toString()}
+            style={{ marginBottom: 100 }}
         />
     );
 }
