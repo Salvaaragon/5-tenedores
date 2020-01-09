@@ -119,7 +119,7 @@ export default function Restaurant(props) {
     };
 
     return (
-        <ScrollView style={styles.viewBody}>
+        <>
             <Header
                 backgroundColor="#00A680"
                 leftComponent={
@@ -140,38 +140,42 @@ export default function Restaurant(props) {
                     style: { fontSize: 20, color: "white" }
                 }}
             />
-            <View style={styles.viewFavourites}>
-                <Icon
-                    type="material-community"
-                    name="heart"
-                    onPress={isFavourite ? removeFavourite : addFavourite}
-                    color={isFavourite ? "#00A680" : "#C2C2C2"}
-                    size={35}
-                    underlayColor="transparent"
+            <ScrollView style={styles.viewBody}>
+                <View style={styles.viewFavourites}>
+                    <Icon
+                        type="material-community"
+                        name="heart"
+                        onPress={isFavourite ? removeFavourite : addFavourite}
+                        color={isFavourite ? "#00A680" : "#C2C2C2"}
+                        size={35}
+                        underlayColor="transparent"
+                    />
+                </View>
+                <CustomCarousel
+                    arrayImages={imagesRestaurant}
+                    width={screenWidth}
+                    height={200}
                 />
-            </View>
-            <CustomCarousel
-                arrayImages={imagesRestaurant}
-                width={screenWidth}
-                height={200}
-            />
-            <RestaurantTitle
-                name={restaurant.name}
-                description={restaurant.description}
-                rating={rating}
-            />
-            <RestaurantInfo
-                location={restaurant.location}
-                name={restaurant.name}
-                address={restaurant.address}
-            />
-            <ListReviews
-                navigation={navigation}
-                idRestaurant={restaurant.id}
-                setRating={setRating}
-            />
-            <Toast ref={toastRef} position="center" opacity={0.5} />
-        </ScrollView>
+                <RestaurantTitle
+                    name={restaurant.name}
+                    description={restaurant.description}
+                    rating={rating}
+                />
+                <RestaurantInfo
+                    location={restaurant.location}
+                    name={restaurant.name}
+                    address={restaurant.address}
+                    website={restaurant.website}
+                    phone={restaurant.phone}
+                />
+                <ListReviews
+                    navigation={navigation}
+                    idRestaurant={restaurant.id}
+                    setRating={setRating}
+                />
+                <Toast ref={toastRef} position="center" opacity={0.5} />
+            </ScrollView>
+        </>
     );
 }
 
@@ -195,12 +199,24 @@ function RestaurantTitle(props) {
 }
 
 function RestaurantInfo(props) {
-    const { location, name, address } = props;
+    const { location, name, address, website, phone } = props;
 
     const listInfo = [
         {
             text: address,
             iconName: "map-marker",
+            iconType: "material-community",
+            action: null
+        },
+        {
+            text: website ? website : "-",
+            iconName: "web",
+            iconType: "material-community",
+            action: null
+        },
+        {
+            text: phone ? phone : "-",
+            iconName: "phone",
             iconType: "material-community",
             action: null
         }
@@ -241,7 +257,6 @@ const styles = StyleSheet.create({
     },
     viewFavourites: {
         position: "absolute",
-        top: 80,
         right: 0,
         zIndex: 2,
         backgroundColor: "#FFF",
