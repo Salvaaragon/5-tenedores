@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import { Button, Icon, Input } from "react-native-elements";
 import { validateEmail } from "../../utils/Validation";
 import * as firebase from "firebase";
 
-export default function RegisterForm() {
+export default function RegisterForm(props) {
+    const { toastRef, navigation } = props;
     const [hidePassword, setHidePassword] = useState(true);
     const [hideRepeatPassword, setHideRepeatPassword] = useState(true);
     const [email, setEmail] = useState("");
@@ -13,25 +14,33 @@ export default function RegisterForm() {
 
     const register = async () => {
         if (!email || !password || !repeatPassword) {
-            console.log("All fields are required");
+            toastRef.current.show("All field are required", 2000);
         } else {
             if (!validateEmail(email)) {
-                console.log("Wrong email");
+                toastRef.current.show("Email is invalid", 2000);
             } else {
                 if (password !== repeatPassword) {
-                    console.log("Passwords are different");
+                    toastRef.current.show("Passwords don't match", 2000);
                 } else {
-                    await firebase
-                        .auth()
-                        .createUserWithEmailAndPassword(email, password)
-                        .then(() => {
-                            console.log("User created correctly");
-                        })
-                        .catch(() => {
-                            console.log(
-                                "Error creating user account. Try again later"
-                            );
-                        });
+                    if (password.length < 6) {
+                        toastRef.current.show(
+                            "Passwords must have min 6 characters",
+                            2000
+                        );
+                    } else {
+                        await firebase
+                            .auth()
+                            .createUserWithEmailAndPassword(email, password)
+                            .then(() => {
+                                navigation.navigate("MyAccount");
+                            })
+                            .catch(() => {
+                                toastRef.current.show(
+                                    "Error during user account creation. Try again later",
+                                    2000
+                                );
+                            });
+                    }
                 }
             }
         }
