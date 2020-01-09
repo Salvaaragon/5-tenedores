@@ -1,10 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet, FlatList, Image } from "react-native";
+import {
+    View,
+    Text,
+    StyleSheet,
+    FlatList,
+    Image,
+    ScrollView
+} from "react-native";
 import { SearchBar, ListItem, Icon, Header } from "react-native-elements";
 import { useDebouncedCallback } from "use-debounce";
 import * as firebase from "firebase";
 import { FireSQL } from "firesql";
-import firebaseApp from "firebase/app";
 
 const fireSQL = new FireSQL(firebase.firestore(), { includeId: "id" });
 
@@ -12,6 +18,7 @@ export default function Search(props) {
     const { navigation } = props;
     const [restaurants, setRestaurants] = useState([]);
     const [search, setSearch] = useState("");
+    const [countResults, setCountResults] = useState(0);
 
     useEffect(() => {
         onSearch();
@@ -23,12 +30,15 @@ export default function Search(props) {
                 .query(`SELECT * FROM restaurants WHERE name LIKE '${search}%'`)
                 .then(response => {
                     setRestaurants(response);
+                    setCountResults(response.length);
                 });
+        } else {
+            setRestaurants([]);
         }
     }, 300);
 
     return (
-        <View>
+        <>
             <Header
                 backgroundColor="#00A680"
                 centerComponent={{
@@ -42,21 +52,33 @@ export default function Search(props) {
                 value={search}
                 containerStyle={styles.searchBar}
             />
+
             {restaurants.length === 0 ? (
                 <NotFoundRestaurants />
             ) : (
-                <FlatList
-                    data={restaurants}
-                    renderItem={restaurant => (
-                        <Restaurant
-                            restaurant={restaurant}
-                            navigation={navigation}
+                <>
+                    <Text style={styles.textTotalRestaurants}>
+                        {countResults > 1
+                            ? "Se han encontrado " +
+                              countResults +
+                              " resultados"
+                            : "Se ha encontrado 1 resultado"}
+                    </Text>
+                    <ScrollView>
+                        <FlatList
+                            data={restaurants}
+                            renderItem={restaurant => (
+                                <Restaurant
+                                    restaurant={restaurant}
+                                    navigation={navigation}
+                                />
+                            )}
+                            keyExtractor={(item, idx) => idx.toString()}
                         />
-                    )}
-                    keyExtractor={(item, idx) => idx.toString()}
-                />
+                    </ScrollView>
+                </>
             )}
-        </View>
+        </>
     );
 }
 
@@ -87,6 +109,7 @@ function Restaurant(props) {
                     prevSection: "Search"
                 })
             }
+            containerStyle={styles.restaurantContainer}
         />
     );
 }
@@ -107,11 +130,14 @@ const styles = StyleSheet.create({
     searchBar: {
         marginBottom: 20
     },
-    headerIcon: {
-        borderRadius: 100,
-        borderColor: "white",
-        borderStyle: "solid",
-        borderWidth: 2,
-        padding: 5
+    textTotalRestaurants: {
+        paddingLeft: 10,
+        fontSize: 15,
+        fontWeight: "bold"
+    },
+    restaurantContainer: {
+        backgroundColor: "#E1E1E1",
+        margin: 5,
+        borderRadius: 15
     }
 });
