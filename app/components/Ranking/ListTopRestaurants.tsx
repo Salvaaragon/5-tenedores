@@ -1,126 +1,126 @@
-import React, { useState, useEffect } from "react";
+import * as firebase from 'firebase';
+import React, { useEffect, useState } from 'react';
 import {
-    StyleSheet,
-    View,
-    Text,
-    FlatList,
-    TouchableOpacity
-} from "react-native";
-import { Card, Image, Icon, Rating } from "react-native-elements";
-import * as firebase from "firebase";
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import { Card, Icon, Image, Rating } from 'react-native-elements';
 
 export default function ListTopRestaurants(props) {
-    const { navigation, restaurants } = props;
+  const { navigation, restaurants } = props;
 
-    return (
-        <FlatList
-            data={restaurants}
-            renderItem={restaurant => (
-                <Restaurant restaurant={restaurant} navigation={navigation} />
-            )}
-            keyExtractor={(item, idx) => idx.toString()}
-            style={{ marginBottom: 100 }}
-        />
-    );
+  return (
+    <FlatList
+      data={restaurants}
+      renderItem={(restaurant) => (
+        <Restaurant restaurant={restaurant} navigation={navigation} />
+      )}
+      keyExtractor={(item, idx) => idx.toString()}
+      style={{ marginBottom: 100 }}
+    />
+  );
 }
 
 function Restaurant(props) {
-    const { restaurant, navigation } = props;
-    const { name, description, images, rating } = restaurant.item;
-    const [imageRestaurant, setImageRestaurant] = useState(null);
-    const [iconColor, setIconColor] = useState("#000");
+  const { restaurant, navigation } = props;
+  const { name, description, images, rating } = restaurant.item;
+  const [imageRestaurant, setImageRestaurant] = useState(null);
+  const [iconColor, setIconColor] = useState('#000');
 
-    useEffect(() => {
-        const image = images[0];
-        firebase
-            .storage()
-            .ref(`restaurant-images/${image}`)
-            .getDownloadURL()
-            .then(response => {
-                setImageRestaurant(response);
-            });
-    }, []);
+  useEffect(() => {
+    const image = images[0];
+    firebase
+      .storage()
+      .ref(`restaurant-images/${image}`)
+      .getDownloadURL()
+      .then((response) => {
+        setImageRestaurant(response);
+      });
+  }, []);
 
-    useEffect(() => {
-        if (restaurant.index === 0) {
-            setIconColor("#EFB819");
-        } else if (restaurant.index === 1) {
-            setIconColor("#8A9597");
-        } else if (restaurant.index === 2) {
-            setIconColor("#CD7F32");
-        }
-    });
+  useEffect(() => {
+    if (restaurant.index === 0) {
+      setIconColor('#EFB819');
+    } else if (restaurant.index === 1) {
+      setIconColor('#8A9597');
+    } else if (restaurant.index === 2) {
+      setIconColor('#CD7F32');
+    }
+  });
 
-    return (
-        <TouchableOpacity
-            onPress={() =>
-                navigation.navigate("Restaurant", {
-                    restaurant: restaurant.item,
-                    prevSection: "TopLists"
-                })
-            }
-        >
-            <Card containerStyle={styles.containerCard}>
-                <Icon
-                    type="material-community"
-                    name="chess-queen"
-                    color={iconColor}
-                    size={40}
-                    containerStyle={styles.containerIcon}
-                />
-                <Image
-                    style={styles.restaurantImage}
-                    resizeMode="cover"
-                    source={{ uri: imageRestaurant }}
-                />
-                <View style={styles.titleRating}>
-                    <Text style={styles.title}>{name}</Text>
-                    <Rating
-                        imageSize={20}
-                        startingValue={rating}
-                        readonly
-                        style={styles.rating}
-                    />
-                </View>
-                <Text style={styles.description}>{description}</Text>
-            </Card>
-        </TouchableOpacity>
-    );
+  return (
+    <TouchableOpacity
+      onPress={() =>
+        navigation.navigate('Restaurant', {
+          restaurant: restaurant.item,
+          prevSection: 'TopLists',
+        })
+      }
+    >
+      <Card containerStyle={styles.containerCard}>
+        <Icon
+          type="material-community"
+          name="chess-queen"
+          color={iconColor}
+          size={40}
+          containerStyle={styles.containerIcon}
+        />
+        <Image
+          style={styles.restaurantImage}
+          resizeMode="cover"
+          source={{ uri: imageRestaurant }}
+        />
+        <View style={styles.titleRating}>
+          <Text style={styles.title}>{name}</Text>
+          <Rating
+            imageSize={20}
+            startingValue={rating}
+            readonly
+            style={styles.rating}
+          />
+        </View>
+        <Text style={styles.description}>{description}</Text>
+      </Card>
+    </TouchableOpacity>
+  );
 }
 
 const styles = StyleSheet.create({
-    containerCard: {
-        marginBottom: 10,
-        borderWidth: 0
-    },
-    containerIcon: {
-        position: "absolute",
-        top: 10,
-        right: 10,
-        zIndex: 1,
-        backgroundColor: "white",
-        borderRadius: 30,
-        padding: 5
-    },
-    restaurantImage: {
-        width: "100%",
-        height: 200
-    },
-    titleRating: {
-        flexDirection: "row",
-        marginTop: 20
-    },
-    title: {
-        fontSize: 20,
-        fontWeight: "bold"
-    },
-    rating: {
-        position: "absolute",
-        right: 0
-    },
-    description: {
-        color: "grey",
-        marginTop: 0,
-        textAlign: "justify"
-    }
+  containerCard: {
+    marginBottom: 10,
+    borderWidth: 0,
+  },
+  containerIcon: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    zIndex: 1,
+    backgroundColor: 'white',
+    borderRadius: 30,
+    padding: 5,
+  },
+  restaurantImage: {
+    width: '100%',
+    height: 200,
+  },
+  titleRating: {
+    flexDirection: 'row',
+    marginTop: 20,
+  },
+  title: {
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  rating: {
+    position: 'absolute',
+    right: 0,
+  },
+  description: {
+    color: 'grey',
+    marginTop: 0,
+    textAlign: 'justify',
+  },
 });
